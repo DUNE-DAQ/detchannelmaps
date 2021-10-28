@@ -23,7 +23,12 @@ main()
   TLOG() << "Creating Module instances...";
   std::shared_ptr<ChannelMap> dummy_map = make_map("DummyChannelMap");
 
-  TLOG() << "Offile channel " << dummy_map->get_offline_channel_from_detector_elements(1, 2, 3, 4);
+  TLOG() << "Dummy Offline channel " << dummy_map->get_offline_channel_from_detector_elements(1, 2, 3, 4);
+
+  std::shared_ptr<ChannelMap> pdps1_map = make_map("ProtoDUNESP1ChannelMap");
+
+  TLOG() << "ProtoDUNESP1 Offline channel " << pdps1_map->get_offline_channel_from_detector_elements(1, 2, 3, 4);
+
 
   TLOG() << "Test complete";
 }

@@ -15,12 +15,12 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-daq_add_library(LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
+daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
 
 ##############################################################################
 # Plugins
 
-#daq_add_plugin(... ... LINK_LIBRARIES daq-rawdata)
+daq_add_plugin( ProtoDUNESP1ChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Integration tests

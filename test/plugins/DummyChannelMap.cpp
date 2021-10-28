@@ -35,7 +35,11 @@ class DummyChannelMap : public ChannelMap
 {
 public:
   explicit DummyChannelMap() {}
-
+  DummyChannelMap(const DummyChannelMap&) = delete;            ///< DummyChannelMap is not copy-constructible
+  DummyChannelMap& operator=(const DummyChannelMap&) = delete; ///< DummyChannelMap is not copy-assignable
+  DummyChannelMap(DummyChannelMap&&) = delete;                 ///< DummyChannelMap is not move-constructible
+  DummyChannelMap& operator=(DummyChannelMap&&) = delete;      ///< DummyChannelMap is not move-assignable
+  
   uint get_offline_channel_from_detector_elements(uint crate, uint slot, uint fiber, uint fembchannel) final {
     return 5678;
   }
@@ -48,4 +52,4 @@ public:
 #endif // DETCHANNELMAPS_TEST_PLUGINS_DUMMYCHANNELMAP_HPP_
 
 
-DEFINE_DUNE_DAQ_MODULE(dunedaq::detchannelmaps::DummyChannelMap)
+DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::DummyChannelMap)
