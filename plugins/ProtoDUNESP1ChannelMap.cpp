@@ -1,8 +1,6 @@
 #include "detchannelmaps/ChannelMap.hpp"
 #include "PdspChannelMapService.hpp"
 
-
-
 namespace dunedaq {
 namespace detchannelmaps {
 
@@ -15,8 +13,8 @@ public:
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
     }
     std::string detchannelmaps_share(detchannelmaps_share_cstr);
-    std::string channel_map_rce = detchannelmaps_share + "/config/protoDUNETPCChannelMap_RCE_v4.txt";
-    std::string channel_map_felix = detchannelmaps_share + "/config/protoDUNETPCChannelMap_FELIX_v4.txt";
+    std::string channel_map_rce = detchannelmaps_share + "/config/protodunesp1/protoDUNETPCChannelMap_RCE_v4.txt";
+    std::string channel_map_felix = detchannelmaps_share + "/config/protodunesp1/protoDUNETPCChannelMap_FELIX_v4.txt";
     m_channel_map.reset(new PdspChannelMapService(channel_map_rce, channel_map_felix));
   }
 

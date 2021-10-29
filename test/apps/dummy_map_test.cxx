@@ -27,8 +27,11 @@ main()
 
   std::shared_ptr<ChannelMap> pdps1_map = make_map("ProtoDUNESP1ChannelMap");
 
-  TLOG() << "ProtoDUNESP1 Offline channel " << pdps1_map->get_offline_channel_from_detector_elements(1, 2, 3, 4);
+  TLOG() << "ProtoDUNESP1 Offline channel " << pdps1_map->get_offline_channel_from_detector_elements(1, 1, 1, 127);
 
+  std::shared_ptr<ChannelMap> vdcb_map = make_map("VDColdboxChannelMap");
+
+  TLOG() << "VDColdbox Offline channel " << vdcb_map->get_offline_channel_from_detector_elements(1, 1, 1, 127);
 
   TLOG() << "Test complete";
 }

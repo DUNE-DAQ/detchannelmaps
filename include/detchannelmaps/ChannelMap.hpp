@@ -44,6 +44,16 @@ class ChannelMap
 {
 public:
 
+  /**
+   * @brief      Gets the offline channel from detector elements.
+   *
+   * @param[in]  crate        The crate
+   * @param[in]  slot         The slot
+   * @param[in]  fiber        The fiber
+   * @param[in]  fembchannel  The fembchannel
+   *
+   * @return     The offline channel from detector elements.
+   */
   virtual uint get_offline_channel_from_detector_elements(uint crate, uint slot, uint fiber, uint fembchannel) = 0;
 
   /**
