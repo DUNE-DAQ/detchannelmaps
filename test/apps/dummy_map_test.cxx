@@ -23,15 +23,23 @@ main()
   TLOG() << "Creating Module instances...";
   std::shared_ptr<TPCChannelMap> dummy_map = make_map("DummyChannelMap");
 
-  TLOG() << "Dummy Offline channel " << dummy_map->get_offline_channel_from_crate_slot_fiber_chan(1, 2, 3, 4);
+  uint oc, plane;
+
+  oc = dummy_map->get_offline_channel_from_crate_slot_fiber_chan(1, 2, 3, 4);
+  plane = dummy_map->get_plane_from_offline_channel(oc);
+  TLOG() << "Dummy Offline channel " << oc << " plane " << plane;
 
   std::shared_ptr<TPCChannelMap> pdps1_map = make_map("ProtoDUNESP1ChannelMap");
 
-  TLOG() << "ProtoDUNESP1 Offline channel " << pdps1_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
+  oc = pdps1_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
+  plane = pdps1_map->get_plane_from_offline_channel(oc);
+  TLOG() << "ProtoDUNESP1 Offline channel " << oc << " plane " << plane;
 
   std::shared_ptr<TPCChannelMap> vdcb_map = make_map("VDColdboxChannelMap");
 
-  TLOG() << "VDColdbox Offline channel " << vdcb_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
+  oc = vdcb_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
+  plane = vdcb_map->get_plane_from_offline_channel(oc);
+  TLOG() << "VDColdbox Offline channel " << oc << " plane " << plane;
 
   TLOG() << "Test complete";
 }
