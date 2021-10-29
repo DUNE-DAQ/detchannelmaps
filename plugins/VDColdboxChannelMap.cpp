@@ -1,10 +1,10 @@
-#include "detchannelmaps/ChannelMap.hpp"
+#include "detchannelmaps/TPCChannelMap.hpp"
 #include "VDColdboxChannelMapService.hpp"
 
 namespace dunedaq {
 namespace detchannelmaps {
 
-class VDColdboxChannelMap :  public ChannelMap
+class VDColdboxChannelMap :  public TPCChannelMap
 {
 public:
   explicit VDColdboxChannelMap() {
@@ -22,7 +22,7 @@ public:
   VDColdboxChannelMap(VDColdboxChannelMap&&) = delete;                 ///< VDColdboxChannelMap is not move-constructible
   VDColdboxChannelMap& operator=(VDColdboxChannelMap&&) = delete;      ///< VDColdboxChannelMap is not move-assignable
 
-  uint get_offline_channel_from_detector_elements(uint crate, uint slot, uint fiber, uint fembchannel) final {
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint fembchannel) final {
     if (crate != 1)
       return 0;
 
@@ -30,6 +30,22 @@ public:
         slot, fiber, fembchannel
     );
   }
+
+  uint get_plane_from_offline_channel(uint offchannel) final {
+    auto chan_info = m_channel_map->getChanInfoFromOfflChan(offchannel);
+
+    switch(chan_info.stripid[0]) {
+      case 'U':
+        return 0;
+      case 'Y':
+        return 1;
+      case 'Z':
+        return 2;
+      default:
+        // code block
+        throw std::logic_error(std::string("Unknown plane identifier")+chan_info.stripid[0]+" in stripid "+chan_info.stripid);
+      }
+  };
 
 private:
 

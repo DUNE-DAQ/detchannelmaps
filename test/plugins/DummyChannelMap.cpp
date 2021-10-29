@@ -11,7 +11,7 @@
 #ifndef DETCHANNELMAPS_TEST_PLUGINS_DUMMYCHANNELMAP_HPP_
 #define DETCHANNELMAPS_TEST_PLUGINS_DUMMYCHANNELMAP_HPP_
 
-#include "detchannelmaps/ChannelMap.hpp"
+#include "detchannelmaps/TPCChannelMap.hpp"
 
 #include "ers/Issue.hpp"
 
@@ -31,7 +31,7 @@ namespace dunedaq {
 
 namespace detchannelmaps {
 
-class DummyChannelMap : public ChannelMap
+class DummyChannelMap : public TPCChannelMap
 {
 public:
   explicit DummyChannelMap() {}
@@ -39,10 +39,15 @@ public:
   DummyChannelMap& operator=(const DummyChannelMap&) = delete; ///< DummyChannelMap is not copy-assignable
   DummyChannelMap(DummyChannelMap&&) = delete;                 ///< DummyChannelMap is not move-constructible
   DummyChannelMap& operator=(DummyChannelMap&&) = delete;      ///< DummyChannelMap is not move-assignable
-  
-  uint get_offline_channel_from_detector_elements(uint crate, uint slot, uint fiber, uint fembchannel) final {
+
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint /*crate*/, uint /*slot*/, uint /*fiber*/, uint /*fembchannel*/) final {
     return 5678;
   }
+
+  uint get_plane_from_offline_channel(uint /*offchannel*/) final {
+    return 2;
+  }
+
 
 };
 

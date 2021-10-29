@@ -1,10 +1,10 @@
-#include "detchannelmaps/ChannelMap.hpp"
+#include "detchannelmaps/TPCChannelMap.hpp"
 #include "PdspChannelMapService.hpp"
 
 namespace dunedaq {
 namespace detchannelmaps {
 
-class ProtoDUNESP1ChannelMap :  public ChannelMap
+class ProtoDUNESP1ChannelMap :  public TPCChannelMap
 {
 public:
   explicit ProtoDUNESP1ChannelMap() {
@@ -23,11 +23,15 @@ public:
   ProtoDUNESP1ChannelMap(ProtoDUNESP1ChannelMap&&) = delete;                 ///< ProtoDUNESP1ChannelMap is not move-constructible
   ProtoDUNESP1ChannelMap& operator=(ProtoDUNESP1ChannelMap&&) = delete;      ///< ProtoDUNESP1ChannelMap is not move-assignable
 
-  uint get_offline_channel_from_detector_elements(uint crate, uint slot, uint fiber, uint fembchannel) final {
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint fembchannel) final {
     return m_channel_map->GetOfflineNumberFromDetectorElements(
         crate, slot, fiber, fembchannel, PdspChannelMapService::kFELIX
     );
   }
+
+  uint get_plane_from_offline_channel(uint offchannel) final {
+    return m_channel_map->PlaneFromOfflineChannel(offchannel);
+  };
 
 private:
 
