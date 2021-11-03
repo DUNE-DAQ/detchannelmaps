@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.12)
 project(detchannelmaps VERSION 1.0.0)
 
 find_package(daq-cmake REQUIRED)
+find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
+find_package(ers REQUIRED)
+find_package(logging REQUIRED)
 
 daq_setup_environment()
 
@@ -12,17 +15,22 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-daq_add_library(LINK_LIBRARIES ers::ers)
+daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
 
 ##############################################################################
 # Plugins
 
-#daq_add_plugin(... ... LINK_LIBRARIES daq-rawdata)
+daq_add_plugin( ProtoDUNESP1ChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( VDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Integration tests
 
+# ##############################################################################
+# Test plugins
+daq_add_plugin( DummyChannelMap duneChannelMap TEST LINK_LIBRARIES detchannelmaps )
 
+daq_add_application( dummy_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Unit Tests
