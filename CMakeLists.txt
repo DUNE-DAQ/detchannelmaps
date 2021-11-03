@@ -18,8 +18,11 @@ daq_setup_environment()
 daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
 
 ##############################################################################
-# Plugins
+# Python bindings
+daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 
+##############################################################################
+# Plugins
 daq_add_plugin( ProtoDUNESP1ChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( VDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
