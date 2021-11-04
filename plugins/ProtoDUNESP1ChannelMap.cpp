@@ -23,9 +23,17 @@ public:
   ProtoDUNESP1ChannelMap(ProtoDUNESP1ChannelMap&&) = delete;                 ///< ProtoDUNESP1ChannelMap is not move-constructible
   ProtoDUNESP1ChannelMap& operator=(ProtoDUNESP1ChannelMap&&) = delete;      ///< ProtoDUNESP1ChannelMap is not move-assignable
 
-  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint fembchannel) final {
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint cechan) final {
+      int fembchannel = cechan;
+      int wc = fiber*2 - 1;
+      if (fembchannel>127)
+        {
+          fembchannel -= 128;
+          wc++;
+        }
+
     return m_channel_map->GetOfflineNumberFromDetectorElements(
-        crate, slot, fiber, fembchannel, PdspChannelMapService::kFELIX
+        crate, slot+1, wc, fembchannel, PdspChannelMapService::kFELIX
     );
   }
 
