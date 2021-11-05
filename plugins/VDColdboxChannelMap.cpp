@@ -23,8 +23,6 @@ public:
   VDColdboxChannelMap& operator=(VDColdboxChannelMap&&) = delete;      ///< VDColdboxChannelMap is not move-assignable
 
   uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint fembchannel) final {
-    if (crate != 1)
-      return 0;
 
     return m_channel_map->getOfflChanFromSlotFiberChan(
         slot, fiber, fembchannel
@@ -42,8 +40,7 @@ public:
       case 'Z':
         return 2;
       default:
-        // code block
-        throw std::logic_error(std::string("Unknown plane identifier")+chan_info.stripid[0]+" in stripid "+chan_info.stripid);
+        return 9999;
       }
   };
 
