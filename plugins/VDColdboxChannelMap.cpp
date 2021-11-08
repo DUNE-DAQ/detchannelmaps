@@ -22,7 +22,7 @@ public:
   VDColdboxChannelMap(VDColdboxChannelMap&&) = delete;                 ///< VDColdboxChannelMap is not move-constructible
   VDColdboxChannelMap& operator=(VDColdboxChannelMap&&) = delete;      ///< VDColdboxChannelMap is not move-assignable
 
-  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint fembchannel) final {
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint /*crate*/, uint slot, uint fiber, uint fembchannel) final {
 
     return m_channel_map->getOfflChanFromSlotFiberChan(
         slot, fiber, fembchannel
