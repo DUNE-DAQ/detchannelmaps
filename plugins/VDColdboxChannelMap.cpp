@@ -13,7 +13,7 @@ public:
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
     }
     std::string detchannelmaps_share(detchannelmaps_share_cstr);
-    std::string channel_map_file = detchannelmaps_share + "/config/vdcoldbox/vdcbce_chanmap_v1_dcchan3200.txt";
+    std::string channel_map_file = detchannelmaps_share + "/config/vdcoldbox/vdcbce_chanmap_v2_dcchan3200.txt";
     m_channel_map.reset(new VDColdboxChannelMapService(channel_map_file));
   }
 
