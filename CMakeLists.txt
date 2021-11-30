@@ -8,10 +8,6 @@ find_package(logging REQUIRED)
 
 daq_setup_environment()
 
-# find_package(cetlib REQUIRED)
-# find_package(ers REQUIRED)
-# find_package(Boost 1.70.0 COMPONENTS unit_test_framework REQUIRED)
-
 ##############################################################################
 # Main library
 
