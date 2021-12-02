@@ -4,7 +4,8 @@
 include(CMakeFindDependencyMacro)
 
 find_dependency(ers)
-find_dependency(Boost 1.70.0 COMPONENTS unit_test_framework)
+find_dependency(logging)
+find_dependency(cetlib)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/@PROJECT_NAME@)
 
