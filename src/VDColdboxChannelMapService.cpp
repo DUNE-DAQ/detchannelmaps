@@ -78,17 +78,23 @@ VDColdboxChannelMapService::VDCBChanInfo VDColdboxChannelMapService::getChanInfo
 
 int VDColdboxChannelMapService::getOfflChanFromWIBConnectorInfo(int wib, int wibconnector, int cechan)
 {
-  int r = -1;
-  auto fm1 = infotochanmap.find(wib);
-  if (fm1 == infotochanmap.end()) return r;
-  auto m1 = fm1->second;
-  auto fm2 = m1.find(wibconnector);
-  if (fm2 == m1.end()) return r;
-  auto m2 = fm2->second;
-  auto fm3 = m2.find(cechan);
-  if (fm3 == m2.end()) return r;
-  r = fm3->second;  
-  return r;
+  // int r = -1;
+  // auto fm1 = infotochanmap.find(wib);
+  // if (fm1 == infotochanmap.end()) return r;
+  // auto& m1 = fm1->second;
+  // auto fm2 = m1.find(wibconnector);
+  // if (fm2 == m1.end()) return r;
+  // auto& m2 = fm2->second;
+  // auto fm3 = m2.find(cechan);
+  // if (fm3 == m2.end()) return r;
+  // r = fm3->second;  
+  // return r;
+  try {
+    return infotochanmap.at(wib).at(wibconnector).at(cechan);
+  } catch (...) {
+    return -1;
+  }
+  // return -1;
 }
 
   // For convenience, the function below  uses conventions from the DAQ WIB header, with two FEMBs per fiber
