@@ -33,7 +33,7 @@ public:
         }
 
     return m_channel_map->GetOfflineNumberFromDetectorElements(
-        crate, slot+1, wc, fembchannel, PdspChannelMapService::kFELIX
+        crate+1, slot, wc, fembchannel, PdspChannelMapService::kFELIX
     );
   }
 
