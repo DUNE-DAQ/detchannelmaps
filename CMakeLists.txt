@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(detchannelmaps VERSION 1.0.2)
+project(detchannelmaps VERSION 1.0.3)
 
 find_package(daq-cmake REQUIRED)
 find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
@@ -7,10 +7,6 @@ find_package(ers REQUIRED)
 find_package(logging REQUIRED)
 
 daq_setup_environment()
-
-# find_package(cetlib REQUIRED)
-# find_package(ers REQUIRED)
-# find_package(Boost 1.70.0 COMPONENTS unit_test_framework REQUIRED)
 
 ##############################################################################
 # Main library
