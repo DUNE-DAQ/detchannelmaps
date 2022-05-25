@@ -30,13 +30,18 @@ public:
   }
 
   uint get_plane_from_offline_channel(uint offchannel) final {
-    auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
+    auto chan_info = m_channel_map->getChanInfoFromOfflChan(offchannel);
 
-    if (!chan_info.valid) {
-      return 9999;
-    }
-
-    return chan_info.plane;
+    switch(chan_info.stripid[0]) {
+      case 'U':
+        return 0;
+      case 'Y':
+        return 1;
+      case 'Z':
+        return 2;
+      default:
+        return 9999;
+      }
   };
 
 private:

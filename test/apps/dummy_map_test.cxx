@@ -41,5 +41,11 @@ main()
   plane = vdcb_map->get_plane_from_offline_channel(oc);
   TLOG() << "VDColdbox Offline channel " << oc << " plane " << plane;
 
+  std::shared_ptr<TPCChannelMap> pd2hd_map = make_map("PD2HDChannelMap");
+
+  oc = vdcb_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
+  plane = vdcb_map->get_plane_from_offline_channel(oc);
+  TLOG() << "PD2HD Offline channel " << oc << " plane " << plane;
+
   TLOG() << "Test complete";
 }

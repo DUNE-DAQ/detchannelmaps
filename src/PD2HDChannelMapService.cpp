@@ -7,17 +7,18 @@
 // Implementation of hardware-offline channel mapping reading from a file.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "PD2HDChannelMapService.h"
-#include "messagefacility/MessageLogger/MessageLogger.h"
+#include "PD2HDChannelMapService.hpp"
+
+#include <fstream>
+#include <sstream>
 
 dune::PD2HDChannelMapService::PD2HDChannelMapService(std::string filename) {
 
   std::ifstream inFile(filename, std::ios::in);
   if (inFile.bad() || inFile.fail() || !inFile.is_open()) {
-    throw std::runtime_error(std::string("Bad map file ") + std::string(filename));
+    throw std::runtime_error(std::string("PD2HDChannelMapService: Invalid map file ") + std::string(filename));
   }
 
-  std::ifstream inFile(fullname, std::ios::in);
   std::string line;
 
   while (std::getline(inFile,line)) {
@@ -38,16 +39,22 @@ dune::PD2HDChannelMapService::PD2HDChannelMapService(std::string filename) {
       >> chanInfo.asic 
       >> chanInfo.asicchan; 
 
+    // calculate wibframechan as it wasn't in the original spec
+
+    chanInfo.wibframechan = chanInfo.chan_in_plane + 128*chanInfo.femb_on_link;
+    if (chanInfo.plane == 1) chanInfo.wibframechan += 40;
+    else if (chanInfo.plane == 2) chanInfo.wibframechan += 80;
+    else if (chanInfo.plane != 0)
+      {
+        throw std::runtime_error("PD2HDChannelMapService: Invalid plane ID in input file: " +  std::to_string(chanInfo.plane));
+      }
     chanInfo.valid = true;
 
     // fill maps.
 
-    if (chanInfo.offlchan >= fNChans)
-      {
-	throw cet::exception("PD2HDChannelMapService") << "Ununderstood Offline Channel: " << chanInfo.offlchan << "\n";
-      }
+    check_offline_channel(chanInfo.offlchan);
 
-    DetToChanInfo[chanInfo.crate][chanInfo.wib][chanInfo.link][chanInfo.femb_on_link][chanInfo.plane][chanInfo.chan_in_plane] = chanInfo;
+    DetToChanInfo[chanInfo.crate][chanInfo.wib][chanInfo.link][chanInfo.wibframechan] = chanInfo;
     OfflToChanInfo[chanInfo.offlchan] = chanInfo;
 
   }
@@ -55,8 +62,32 @@ dune::PD2HDChannelMapService::PD2HDChannelMapService(std::string filename) {
 
 }
 
+dune::PD2HDChannelMapService::HDChanInfo_t dune::PD2HDChannelMapService::GetChanInfoFromDetectorElements(
+    unsigned int crate,
+    unsigned int slot,
+    unsigned int link,
+    unsigned int femb_on_link,
+    unsigned int plane,
+    unsigned int chan_in_plane ) const {
 
-dune::PD2HDChannelMapService::HDChanInfo_t dune::PD2HDChannelMapService::GetChanInfoFromDetectorElements(unsigned int crate, unsigned int slot, unsigned int link, unsigned int femb_on_link, unsigned int plane, unsigned int chan_in_plane ) const {
+  unsigned int wibframechan = 128*femb_on_link + chan_in_plane;
+  if (plane == 1) wibframechan += 40;
+  else if (plane == 2) wibframechan += 80;
+  else if (plane != 0)
+    {
+      HDChanInfo_t badInfo = {};
+      badInfo.valid = false;
+      return badInfo;
+    }
+
+  return GetChanInfoFromWIBElements(crate,slot,link,wibframechan);
+}
+
+dune::PD2HDChannelMapService::HDChanInfo_t dune::PD2HDChannelMapService::GetChanInfoFromWIBElements(
+    unsigned int crate,
+    unsigned int slot,
+    unsigned int link,
+    unsigned int wibframechan ) const {
 
   unsigned int wib = slot + 1;
 
@@ -75,18 +106,9 @@ dune::PD2HDChannelMapService::HDChanInfo_t dune::PD2HDChannelMapService::GetChan
   if (fm3 == m2.end()) return badInfo;
   auto& m3 = fm3->second;
 
-  auto fm4 = m3.find(femb_on_link);
+  auto fm4 = m3.find(wibframechan);
   if (fm4 == m3.end()) return badInfo;
-  auto& m4 = fm4->second;
-
-  auto fm5 = m4.find(plane);
-  if (fm5 == m4.end()) return badInfo;
-  auto& m5 = fm5->second;
-
-  auto fm6 = m5.find(chan_in_plane);
-  if (fm6 == m5.end()) return badInfo;
-
-  return fm6->second;
+  return fm4->second;
 }
 
 
@@ -101,6 +123,3 @@ dune::PD2HDChannelMapService::HDChanInfo_t dune::PD2HDChannelMapService::GetChan
   return ci->second;
 
 }
-
-
-DEFINE_ART_SERVICE(dune::PD2HDChannelMapService)

@@ -22,31 +22,33 @@ public:
   PD2HDChannelMap(PD2HDChannelMap&&) = delete;                 ///< PD2HDChannelMap is not move-constructible
   PD2HDChannelMap& operator=(PD2HDChannelMap&&) = delete;      ///< PD2HDChannelMap is not move-assignable
 
-  uint get_offline_channel_from_crate_slot_fiber_chan(uint /*crate*/, uint slot, uint fiber, uint fembchannel) final {
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint link, uint wibframechan) final {
 
-    return m_channel_map->getOfflChanFromSlotFiberChan(
-        slot, fiber, fembchannel
+    auto chan_info = m_channel_map->GetChanInfoFromWIBElements(
+        crate, slot, link, wibframechan
     );
+
+    if (!chan_info.valid) {
+      return -1;
+    }
+
+    return chan_info.offlchan;
+
   }
 
   uint get_plane_from_offline_channel(uint offchannel) final {
-    auto chan_info = m_channel_map->getChanInfoFromOfflChan(offchannel);
+    auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
-    switch(chan_info.stripid[0]) {
-      case 'U':
-        return 0;
-      case 'Y':
-        return 1;
-      case 'Z':
-        return 2;
-      default:
-        return 9999;
-      }
+    if (!chan_info.valid) {
+      return 9999;
+    }
+
+    return chan_info.plane;
   };
 
 private:
 
-  std::unique_ptr<PD2HDChannelMapService> m_channel_map;
+  std::unique_ptr<dune::PD2HDChannelMapService> m_channel_map;
 
   
 };
