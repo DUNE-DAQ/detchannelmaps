@@ -1,6 +1,8 @@
 #include "detchannelmaps/TPCChannelMap.hpp"
 #include "PD2HDChannelMapService.hpp"
 
+#include "logging/Logging.hpp" // NOLINT
+
 namespace dunedaq {
 namespace detchannelmaps {
 
@@ -15,6 +17,7 @@ public:
     std::string detchannelmaps_share(detchannelmaps_share_cstr);
     std::string channel_map_file = detchannelmaps_share + "/config/pd2hd/PD2HDChannelMap_v1.txt";
     m_channel_map.reset(new dune::PD2HDChannelMapService(channel_map_file));
+    TLOG() << "PD2HDChannelMap Created";
   }
 
   PD2HDChannelMap(const PD2HDChannelMap&) = delete;            ///< PD2HDChannelMap is not copy-constructible
