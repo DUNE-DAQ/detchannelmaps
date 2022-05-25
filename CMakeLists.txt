@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(detchannelmaps VERSION 1.0.3)
+project(detchannelmaps VERSION 1.1.0)
 
 find_package(daq-cmake REQUIRED)
 find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
@@ -21,6 +21,7 @@ daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 # Plugins
 daq_add_plugin( ProtoDUNESP1ChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( VDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2HDChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Integration tests
