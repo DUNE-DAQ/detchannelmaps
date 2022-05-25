@@ -19,7 +19,7 @@ VDColdboxChannelMapService::VDColdboxChannelMapService(std::string filename) {
 
   std::ifstream inFile(filename, std::ios::in);
   if (inFile.bad() || inFile.fail() || !inFile.is_open()) {
-    throw std::runtime_error(std::string("Bad file ") + std::string(filename));
+    throw std::runtime_error(std::string("VDColdboxChannelMapService: Invalid map file ") + std::string(filename));
   }
 
   std::string line;
