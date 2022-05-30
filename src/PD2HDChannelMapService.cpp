@@ -94,7 +94,6 @@ dune::PD2HDChannelMapService::HDChanInfo_t dune::PD2HDChannelMapService::GetChan
   HDChanInfo_t badInfo = {};
   badInfo.valid = false;
 
-  auto fm1 = DetToChanInfo.find(crate);
 // a hack -- ununderstood crates are mapped to crate 2
 // for use in the Coldbox
 // crate 2 has the lowest-numbered offline channels
