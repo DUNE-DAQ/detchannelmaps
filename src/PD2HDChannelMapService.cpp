@@ -94,8 +94,19 @@ dune::PD2HDChannelMapService::HDChanInfo_t dune::PD2HDChannelMapService::GetChan
   HDChanInfo_t badInfo = {};
   badInfo.valid = false;
 
+// a hack -- ununderstood crates are mapped to crate 2
+// for use in the Coldbox
+// crate 2 has the lowest-numbered offline channels
+// data with two ununderstood crates, or an ununderstood crate and crate 2,
+// will have duplicate channels.
+
   auto fm1 = DetToChanInfo.find(crate);
-  if (fm1 == DetToChanInfo.end()) return badInfo;
+  if (fm1 == DetToChanInfo.end()) 
+    {
+      unsigned int substituteCrate = 2;  
+      fm1 = DetToChanInfo.find(substituteCrate);
+      if (fm1 == DetToChanInfo.end()) return badInfo;
+    }
   auto& m1 = fm1->second;
 
   auto fm2 = m1.find(wib);
