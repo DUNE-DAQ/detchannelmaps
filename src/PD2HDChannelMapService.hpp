@@ -51,14 +51,6 @@ public:
   // Map instrumentation numbers (crate:slot:link:FEMB:plane) to offline channel number.  FEMB is 0 or 1 and indexes the FEMB in the WIB frame.
   // plane = 0 for U, 1 for V and 2 for X
 
-  HDChanInfo_t GetChanInfoFromDetectorElements(
-   unsigned int crate,
-   unsigned int slot,
-   unsigned int link,
-   unsigned int femb_on_link,
-   unsigned int plane,
-   unsigned int chan_in_plane) const;
-
   HDChanInfo_t GetChanInfoFromWIBElements(
    unsigned int crate,
    unsigned int slot,
