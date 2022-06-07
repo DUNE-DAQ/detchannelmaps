@@ -1,31 +1,28 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-// Class:       PD2HDChannelMapService
-// Module type: service
-// File:        PD2HDChannelMapService.h
-// Author:      Tom Junk, May 2022
+// Class:       PD2HDChannelMapSP
+// Module type: algorithm
+// File:        PD2HDChannelMapSP.h
+// Author:      Tom Junk, June 2022
 //
-// Implementation of hardware-offline channel mapping reading from a file.  
+// Implementation of hardware-offline channel mapping reading from a file.
+// art-independent class  
 // ProtoDUNE-2 Horizontal Drift APA wire to offline channel map
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef DETCHANNELSMAP_PD2HDCHANNELMAPSERVICE_H_
-#define DETCHANNELSMAP_PD2HDCHANNELMAPSERVICE_H_
+#ifndef PD2HDChannelMapSP_H
+#define PD2HDChannelMapSP_H
 
-#include <map>
-#include <vector>
-#include <limits>
 #include <unordered_map>
-
+#include <vector>
+#include <stdexcept>
 
 namespace dune {
-  class PD2HDChannelMapService;
+  class PD2HDChannelMapSP;
 }
 
-class dune::PD2HDChannelMapService {
+class dune::PD2HDChannelMapSP {
 
 public:
-
-  PD2HDChannelMapService(std::string mapfile);
 
   typedef struct HDChanInfo {
     unsigned int offlchan;        // in gdml and channel sorting convention
@@ -44,20 +41,16 @@ public:
     bool valid;          // true if valid, false if not
   } HDChanInfo_t;
 
-  /////////////////////////\ ProtoDUNE-SP channel map functions //////////////////////////////
+  PD2HDChannelMapSP();  // constructor
+
+  // initialize:  read map from file
+
+  void ReadMapFromFile(std::string &fullname);
 
   // TPC channel map accessors
 
   // Map instrumentation numbers (crate:slot:link:FEMB:plane) to offline channel number.  FEMB is 0 or 1 and indexes the FEMB in the WIB frame.
   // plane = 0 for U, 1 for V and 2 for X
-
-  HDChanInfo_t GetChanInfoFromDetectorElements(
-   unsigned int crate,
-   unsigned int slot,
-   unsigned int link,
-   unsigned int femb_on_link,
-   unsigned int plane,
-   unsigned int chan_in_plane) const;
 
   HDChanInfo_t GetChanInfoFromWIBElements(
    unsigned int crate,
@@ -89,10 +82,11 @@ private:
   {
   if (offlineChannel >= fNChans)
     {      
-      throw std::range_error("PD2HDChannelMapService: Offline TPC Channel Number out of range: "+ std::to_string(offlineChannel)); 
+      throw std::range_error("PD2HDChannelMapSP offline Channel out of range"); 
     }
   };
 
 };
+
 
 #endif
