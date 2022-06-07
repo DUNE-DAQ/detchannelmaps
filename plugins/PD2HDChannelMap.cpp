@@ -1,5 +1,5 @@
 #include "detchannelmaps/TPCChannelMap.hpp"
-#include "PD2HDChannelMapService.hpp"
+#include "PD2HDChannelMapSP.h"
 
 #include "logging/Logging.hpp" // NOLINT
 
@@ -16,7 +16,8 @@ public:
     }
     std::string detchannelmaps_share(detchannelmaps_share_cstr);
     std::string channel_map_file = detchannelmaps_share + "/config/pd2hd/PD2HDChannelMap_v1.txt";
-    m_channel_map.reset(new dune::PD2HDChannelMapService(channel_map_file));
+    m_channel_map.reset(new dune::PD2HDChannelMapSP());
+    m_channel_map->ReadMapFromFile(channel_map_file);
     TLOG() << "PD2HDChannelMap Created";
   }
 
@@ -51,7 +52,7 @@ public:
 
 private:
 
-  std::unique_ptr<dune::PD2HDChannelMapService> m_channel_map;
+  std::unique_ptr<dune::PD2HDChannelMapSP> m_channel_map;
 
   
 };
