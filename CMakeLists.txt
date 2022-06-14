@@ -11,7 +11,7 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
+daq_add_library(*.cpp *.cxx LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
 
 ##############################################################################
 # Python bindings
