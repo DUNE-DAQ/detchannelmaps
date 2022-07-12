@@ -1,5 +1,5 @@
 /**
- * @file wib.cpp
+ * @file hardwaremapservice.cpp
  *
  * This is part of the DUNE DAQ Software Suite, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
