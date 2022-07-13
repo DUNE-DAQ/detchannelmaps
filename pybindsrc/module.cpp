@@ -16,12 +16,14 @@ namespace detchannelmaps {
 namespace python {
 
     extern void register_maps(py::module &);
+    extern void register_hw_map_service(py::module&);
 
 PYBIND11_MODULE(_daq_detchannelmaps_py, m) {
 
     m.doc() = "c++ implementation of the dunedaq detchannelmaps modules"; // optional module docstring
 
     register_maps(m);
+    register_hw_map_service(m);
 }
 
 } // namespace python
