@@ -25,6 +25,7 @@ HardwareMapService::HardwareMapService(std::string filename) {
   std::string line;
   while (std::getline(inFile,line)) {
     HWInfo hw_info;
+    if (line.size() == 0 || line[0] == '#') continue;
     std::stringstream linestream(line);
     linestream >>
       hw_info.dro_source_id >>
@@ -72,10 +73,35 @@ HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(uint64_t 
 }
 
 uint64_t HardwareMapService::get_geoid(uint16_t det_link, uint16_t det_slot, uint16_t det_crate, uint16_t det_id) {
-    uint64_t geoid= det_link << 48 | det_slot << 32 | det_crate << 16 | det_id;
+    uint64_t geoid= static_cast<uint64_t>(det_link) << 48 | static_cast<uint64_t>(det_slot) << 32 | static_cast<uint64_t>(det_crate) << 16 | det_id;
     std::cout << "geoid " << std::hex << geoid << std::dec << std::endl;
     return geoid;
 
+}
+
+std::vector<HardwareMapService::DROInfo> HardwareMapService::get_dro_info() {
+    // DRO is defined by a host-card pair!
+    std::map<std::pair<std::string, uint16_t>, DROInfo> map;
+
+    for (auto& gid : m_geo_id_to_info_map) {
+        auto hwi = gid.second;
+        auto key = std::make_pair(hwi.dro_host, hwi.dro_card);
+
+        if (map.count(key)) {
+            map[key].links.push_back(hwi);
+        }
+        else {
+            map[key] = DROInfo{ hwi.dro_host, hwi.dro_card, {hwi} };
+        }
+    }
+
+    std::vector<DROInfo> output;
+
+    for (auto& entry : map) {
+        output.push_back(entry.second);
+    }
+
+    return output;
 }
 
 

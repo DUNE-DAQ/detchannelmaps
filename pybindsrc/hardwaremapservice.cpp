@@ -40,12 +40,21 @@ register_hw_map_service(py::module& m)
         .def_readwrite("geo_id", &HardwareMapService::HWInfo::geo_id)
         ;
 
+    py::class_<HardwareMapService::DROInfo> py_hwmapservice_droinfo(m, "DROInfo");
+    py_hwmapservice_droinfo.def(py::init());
+    py_hwmapservice_droinfo
+        .def_readwrite("host", &HardwareMapService::DROInfo::host)
+        .def_readwrite("card", &HardwareMapService::DROInfo::card)
+        .def_readwrite("links", &HardwareMapService::DROInfo::links)
+        ;
+
     py_hwmapservice.def(py::init<std::string>());
 
     py_hwmapservice
         .def("get_hw_info_from_source_id", &HardwareMapService::get_hw_info_from_source_id)
         .def("get_hw_info_from_geo_id", &HardwareMapService::get_hw_info_from_geo_id)
         .def("get_geoid", &HardwareMapService::get_geoid)
+        .def("get_dro_info", &HardwareMapService::get_dro_info)
         ;
 }
 

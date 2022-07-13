@@ -37,6 +37,12 @@ class HardwareMapService {
     uint64_t geo_id = 0;
   };
 
+  struct DROInfo {
+      std::string host = "";
+      uint16_t card = 0;
+      std::vector<HWInfo> links;
+  };
+
   // Access methods
 
   // The function below gets hw info from DAQ source id.  
@@ -49,6 +55,8 @@ class HardwareMapService {
   HWInfo get_hw_info_from_geo_id(uint64_t geo_id);
 
   uint64_t get_geoid(uint16_t det_link, uint16_t det_slot, uint16_t det_crate, uint16_t det_id);
+
+  std::vector<DROInfo> get_dro_info();
 
 
  private:
