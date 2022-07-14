@@ -47,5 +47,11 @@ main()
   plane = pd2hd_map->get_plane_from_offline_channel(oc);
   TLOG() << "PD2HD Offline channel " << oc << " plane " << plane;
 
+  std::shared_ptr<TPCChannelMap> hdcb_map = make_map("HDColdboxChannelMap");
+
+  oc = hdcb_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
+  plane = hdcb_map->get_plane_from_offline_channel(oc);
+  TLOG() << "HDColdbox Offline channel " << oc << " plane " << plane;
+
   TLOG() << "Test complete";
 }
