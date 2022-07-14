@@ -74,7 +74,6 @@ HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(uint64_t 
 
 uint64_t HardwareMapService::get_geoid(uint16_t det_link, uint16_t det_slot, uint16_t det_crate, uint16_t det_id) {
     uint64_t geoid= static_cast<uint64_t>(det_link) << 48 | static_cast<uint64_t>(det_slot) << 32 | static_cast<uint64_t>(det_crate) << 16 | det_id;
-    std::cout << "geoid " << std::hex << geoid << std::dec << std::endl;
     return geoid;
 
 }
