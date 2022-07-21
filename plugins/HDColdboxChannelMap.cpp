@@ -6,25 +6,25 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-class PD2HDChannelMap :  public TPCChannelMap
+class HDColdboxChannelMap :  public TPCChannelMap
 {
 public:
-  explicit PD2HDChannelMap() {
+  explicit HDColdboxChannelMap() {
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
     }
     std::string detchannelmaps_share(detchannelmaps_share_cstr);
-    std::string channel_map_file = detchannelmaps_share + "/config/pd2hd/PD2HDChannelMap_v3.txt";
+    std::string channel_map_file = detchannelmaps_share + "/config/pd2hd/PD2HDChannelMap_v2.txt";
     m_channel_map.reset(new dune::PD2HDChannelMapSP());
     m_channel_map->ReadMapFromFile(channel_map_file);
-    TLOG_DEBUG(10) << "PD2HDChannelMap Created";
+    TLOG_DEBUG(10) << "HDColdboxChannelMap Created";
   }
 
-  PD2HDChannelMap(const PD2HDChannelMap&) = delete;            ///< PD2HDChannelMap is not copy-constructible
-  PD2HDChannelMap& operator=(const PD2HDChannelMap&) = delete; ///< PD2HDChannelMap is not copy-assignable
-  PD2HDChannelMap(PD2HDChannelMap&&) = delete;                 ///< PD2HDChannelMap is not move-constructible
-  PD2HDChannelMap& operator=(PD2HDChannelMap&&) = delete;      ///< PD2HDChannelMap is not move-assignable
+  HDColdboxChannelMap(const HDColdboxChannelMap&) = delete;            ///< HDColdboxChannelMap is not copy-constructible
+  HDColdboxChannelMap& operator=(const HDColdboxChannelMap&) = delete; ///< HDColdboxChannelMap is not copy-assignable
+  HDColdboxChannelMap(HDColdboxChannelMap&&) = delete;                 ///< HDColdboxChannelMap is not move-constructible
+  HDColdboxChannelMap& operator=(HDColdboxChannelMap&&) = delete;      ///< HDColdboxChannelMap is not move-assignable
 
   uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint link, uint wibframechan) final {
 
@@ -57,7 +57,7 @@ private:
   
 };
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::PD2HDChannelMap)
+DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::HDColdboxChannelMap)
 
 
 } // namespace detchannelmaps
