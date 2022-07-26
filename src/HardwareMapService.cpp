@@ -15,7 +15,7 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-HardwareMapService::HardwareMapService(std::string filename) {
+HardwareMapService::HardwareMapService(const std::string filename) {
 
   std::ifstream inFile(filename, std::ios::in);
   if (inFile.bad() || inFile.fail() || !inFile.is_open()) {
@@ -38,7 +38,7 @@ HardwareMapService::HardwareMapService(std::string filename) {
       hw_info.dro_slr >>
       hw_info.dro_link;
     hw_info.is_valid = true;
-    hw_info.geo_id = get_geoid(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
+    hw_info.geo_id = get_geo_id(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
     m_geo_id_to_info_map[hw_info.geo_id] = hw_info;
     auto sid = m_source_id_to_geo_ids_map.find(hw_info.dro_source_id);
     if(sid != m_source_id_to_geo_ids_map.end()) {
@@ -52,9 +52,24 @@ HardwareMapService::HardwareMapService(std::string filename) {
   }
   inFile.close();
 
+    // DRO is defined by a host-card pair!
+    std::map<std::pair<std::string, uint16_t>, DROInfo> map;
+
+    for (auto& gid : m_geo_id_to_info_map) {
+        auto hwi = gid.second;
+        auto key = std::make_pair(hwi.dro_host, hwi.dro_card);
+
+        if (m_dro_info_map.count(key)) {
+            m_dro_info_map[key].links.push_back(hwi);
+        }
+        else {
+            m_dro_info_map[key] = DROInfo{ hwi.dro_host, hwi.dro_card, {hwi} };
+        }
+    }
+
 }
 
-std::vector<HardwareMapService::HWInfo> HardwareMapService::get_hw_info_from_source_id(uint32_t dro_source_id) {
+std::vector<HardwareMapService::HWInfo> HardwareMapService::get_hw_info_from_source_id(const uint32_t dro_source_id) {
      auto sid = m_source_id_to_geo_ids_map.find(dro_source_id);
      if(sid != m_source_id_to_geo_ids_map.end()) {
 	     return sid->second;
@@ -62,7 +77,7 @@ std::vector<HardwareMapService::HWInfo> HardwareMapService::get_hw_info_from_sou
      return std::vector<HWInfo>();
 }
 
-HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(uint64_t geo_id) {
+HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(const uint64_t geo_id) {
      auto gid = m_geo_id_to_info_map.find(geo_id);
      if(gid != m_geo_id_to_info_map.end()) {
 	return gid->second;
@@ -72,37 +87,33 @@ HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(uint64_t 
      return hw_info;
 }
 
-uint64_t HardwareMapService::get_geoid(uint16_t det_link, uint16_t det_slot, uint16_t det_crate, uint16_t det_id) {
+uint64_t HardwareMapService::get_geo_id(const uint16_t det_link, const uint16_t det_slot, const uint16_t det_crate, const uint16_t det_id) {
     uint64_t geoid= static_cast<uint64_t>(det_link) << 48 | static_cast<uint64_t>(det_slot) << 32 | static_cast<uint64_t>(det_crate) << 16 | det_id;
     return geoid;
 
 }
 
-std::vector<HardwareMapService::DROInfo> HardwareMapService::get_dro_info() {
-    // DRO is defined by a host-card pair!
-    std::map<std::pair<std::string, uint16_t>, DROInfo> map;
-
-    for (auto& gid : m_geo_id_to_info_map) {
-        auto hwi = gid.second;
-        auto key = std::make_pair(hwi.dro_host, hwi.dro_card);
-
-        if (map.count(key)) {
-            map[key].links.push_back(hwi);
-        }
-        else {
-            map[key] = DROInfo{ hwi.dro_host, hwi.dro_card, {hwi} };
-        }
-    }
+std::vector<HardwareMapService::DROInfo> HardwareMapService::get_all_dro_info() {
 
     std::vector<DROInfo> output;
 
-    for (auto& entry : map) {
+    for (auto& entry : m_dro_info_map) {
         output.push_back(entry.second);
     }
-
     return output;
 }
 
+HardwareMapService::DROInfo HardwareMapService::get_dro_info(const std::string host_name, const uint16_t dro_card) {
+    auto key = std::make_pair(host_name, dro_card);
+     
+    auto dro = m_dro_info_map.find(key);
+    if(dro != m_dro_info_map.end())
+	  return dro->second;
+
+    std::ostringstream s;
+    s<< "HardwareMapService: Invalid DRO host/card pair " << host_name << "/" << dro_card;
+    throw std::runtime_error(s.str());  
+}
 
 } // namespace detchannelsmap
 } // namespace dunedaq
