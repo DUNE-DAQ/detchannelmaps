@@ -11,6 +11,7 @@
 #define DETCHANNELSMAP_VDCOLDBOXCHANNELMAPSERVICE_H_
 
 #include <unordered_map>
+#include <string>
 
 namespace dunedaq {
 namespace detchannelmaps {
