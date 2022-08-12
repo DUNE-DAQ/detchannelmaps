@@ -27,7 +27,8 @@ register_hw_map_service(py::module& m)
     py::class_<HardwareMapService::HWInfo> py_hwmapservice_hwinfo(m, "HWInfo");
     py_hwmapservice_hwinfo.def(py::init());
     py_hwmapservice_hwinfo
-        .def_readwrite("dro_source_id", &HardwareMapService::HWInfo::dro_source_id)
+        .def_readwrite("source_id_subsystem", &HardwareMapService::HWInfo::source_id_subsystem)
+        .def_readwrite("source_id_id", &HardwareMapService::HWInfo::source_id_id)
         .def_readwrite("det_link", &HardwareMapService::HWInfo::det_link)
         .def_readwrite("det_slot", &HardwareMapService::HWInfo::det_slot)
         .def_readwrite("det_crate", &HardwareMapService::HWInfo::det_crate)

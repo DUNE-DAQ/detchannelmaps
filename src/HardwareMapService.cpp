@@ -28,7 +28,8 @@ HardwareMapService::HardwareMapService(const std::string filename) {
     if (line.size() == 0 || line[0] == '#') continue;
     std::stringstream linestream(line);
     linestream >>
-      hw_info.dro_source_id >>
+        hw_info.source_id_subsystem >>
+      hw_info.source_id_id >>
       hw_info.det_link >>
       hw_info.det_slot >>
       hw_info.det_crate >>
@@ -39,15 +40,15 @@ HardwareMapService::HardwareMapService(const std::string filename) {
       hw_info.dro_link;
     hw_info.is_valid = true;
     hw_info.geo_id = get_geo_id(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
-    m_geo_id_to_info_map[hw_info.geo_id] = hw_info;
-    auto sid = m_source_id_to_geo_ids_map.find(hw_info.dro_source_id);
+    m_geo_id_to_info_map[{ hw_info.source_id_subsystem, hw_info.geo_id }] = hw_info;
+    auto sid = m_source_id_to_geo_ids_map.find({ hw_info.source_id_subsystem, hw_info.source_id_id });
     if(sid != m_source_id_to_geo_ids_map.end()) {
         sid->second.push_back(hw_info);
     }
     else {
         std::vector<HWInfo> vec;
 	vec.push_back(hw_info);
-	    m_source_id_to_geo_ids_map[hw_info.dro_source_id] = vec;
+        m_source_id_to_geo_ids_map[{ hw_info.source_id_subsystem, hw_info.source_id_id }] = vec;
     }
   }
   inFile.close();
@@ -69,16 +70,16 @@ HardwareMapService::HardwareMapService(const std::string filename) {
 
 }
 
-std::vector<HardwareMapService::HWInfo> HardwareMapService::get_hw_info_from_source_id(const uint32_t dro_source_id) {
-     auto sid = m_source_id_to_geo_ids_map.find(dro_source_id);
+std::vector<HardwareMapService::HWInfo> HardwareMapService::get_hw_info_from_source_id(const uint32_t dro_source_id, const uint16_t subsystem) {
+  auto sid = m_source_id_to_geo_ids_map.find({ subsystem, dro_source_id });
      if(sid != m_source_id_to_geo_ids_map.end()) {
 	     return sid->second;
      }
      return std::vector<HWInfo>();
 }
 
-HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(const uint64_t geo_id) {
-     auto gid = m_geo_id_to_info_map.find(geo_id);
+HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(const uint64_t geo_id, const uint16_t subsystem) {
+  auto gid = m_geo_id_to_info_map.find({ subsystem, geo_id });
      if(gid != m_geo_id_to_info_map.end()) {
 	return gid->second;
      }
