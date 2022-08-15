@@ -89,9 +89,17 @@ HardwareMapService::HWInfo HardwareMapService::get_hw_info_from_geo_id(const uin
 }
 
 uint64_t HardwareMapService::get_geo_id(const uint16_t det_link, const uint16_t det_slot, const uint16_t det_crate, const uint16_t det_id) {
-    uint64_t geoid= static_cast<uint64_t>(det_link) << 48 | static_cast<uint64_t>(det_slot) << 32 | static_cast<uint64_t>(det_crate) << 16 | det_id;
-    return geoid;
+  uint64_t geoid = static_cast<uint64_t>(det_link) << 48 | static_cast<uint64_t>(det_slot) << 32 | static_cast<uint64_t>(det_crate) << 16 | det_id;
+  return geoid;
+}
 
+HardwareMapService::GeoInfo HardwareMapService::parse_geo_id(const uint64_t geo_id) {
+  GeoInfo geo_info;
+  geo_info.det_link = 0xffff & (geo_id >> 48);
+  geo_info.det_slot = 0xffff & (geo_id >> 32);
+  geo_info.det_crate = 0xffff & (geo_id >> 16);
+  geo_info.det_id = 0xffff & geo_id;
+  return geo_info;
 }
 
 std::vector<HardwareMapService::DROInfo> HardwareMapService::get_all_dro_info() {
