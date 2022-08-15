@@ -46,15 +46,22 @@ register_hw_map_service(py::module& m)
     py_hwmapservice_droinfo
         .def_readwrite("host", &HardwareMapService::DROInfo::host)
         .def_readwrite("card", &HardwareMapService::DROInfo::card)
-        .def_readwrite("links", &HardwareMapService::DROInfo::links)
-        ;
+        .def_readwrite("links", &HardwareMapService::DROInfo::links);
+
+    py::class_<HardwareMapService::GeoInfo> py_hwmapservice_geoinfo(m, "DROInfo");
+    py_hwmapservice_geoinfo.def(py::init());
+    py_hwmapservice_geoinfo.def_readwrite("det_link", &HardwareMapService::GeoInfo::det_link)
+      .def_readwrite("det_slot", &HardwareMapService::GeoInfo::det_slot)
+      .def_readwrite("det_crate", &HardwareMapService::GeoInfo::det_crate)
+      .def_readwrite("det_id", &HardwareMapService::GeoInfo::det_id);
 
     py_hwmapservice.def(py::init<std::string>());
 
     py_hwmapservice
         .def("get_hw_info_from_source_id", &HardwareMapService::get_hw_info_from_source_id)
         .def("get_hw_info_from_geo_id", &HardwareMapService::get_hw_info_from_geo_id)
-        .def("get_geo_id", &HardwareMapService::get_geo_id)
+      .def("get_geo_id", &HardwareMapService::get_geo_id)
+      .def("parse_geo_id", &HardwareMapService::parse_geo_id)
         .def("get_all_dro_info", &HardwareMapService::get_all_dro_info)
         .def("get_dro_info", &HardwareMapService::get_dro_info)
         ;
