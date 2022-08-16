@@ -11,8 +11,9 @@
 #define DETCHANNELSMAP_HARDWAREMAPSERVICE_H_
 
 #include <iostream>
-#include <vector>
 #include <map>
+#include <tuple>
+#include <vector>
 
 namespace dunedaq {
 namespace detchannelmaps {
@@ -43,6 +44,13 @@ class HardwareMapService {
       std::vector<HWInfo> links;
   };
 
+  struct GeoInfo {
+    uint16_t det_link = 0;
+    uint16_t det_slot = 0;
+    uint16_t det_crate = 0;
+    uint16_t det_id = 0;
+  };
+
   // Access methods
 
   // The function below gets hw info from DAQ source id.  
@@ -54,7 +62,8 @@ class HardwareMapService {
 
   HWInfo get_hw_info_from_geo_id(const uint64_t geo_id);
 
-  uint64_t get_geo_id(const uint16_t det_link, const uint16_t det_slot, const uint16_t det_crate, const uint16_t det_id);
+  static uint64_t get_geo_id(const uint16_t det_link, const uint16_t det_slot, const uint16_t det_crate, const uint16_t det_id);
+  static GeoInfo parse_geo_id(const uint64_t geo_id);
 
   std::vector<DROInfo> get_all_dro_info();
   DROInfo get_dro_info(const std::string host_name, const uint16_t dro_card);
