@@ -38,4 +38,20 @@ BOOST_AUTO_TEST_CASE(Basics)
   detchannelmaps::HardwareMapService ms(GetTestFileName());
 }
 
+BOOST_AUTO_TEST_CASE(GeoInfo)
+{
+  uint16_t original_det_link = 0x0f;
+  uint16_t original_det_slot = 0xf0;
+  uint16_t original_det_crate = 0xa5;
+  uint16_t original_det_id = 0x5a;
+
+  uint64_t geo_id = detchannelmaps::HardwareMapService::get_geo_id(original_det_link, original_det_slot, original_det_crate, original_det_id);
+  detchannelmaps::HardwareMapService::GeoInfo geo_info = detchannelmaps::HardwareMapService::parse_geo_id(geo_id);
+
+  BOOST_REQUIRE_EQUAL(geo_info.det_link, original_det_link);
+  BOOST_REQUIRE_EQUAL(geo_info.det_slot, original_det_slot);
+  BOOST_REQUIRE_EQUAL(geo_info.det_crate, original_det_crate);
+  BOOST_REQUIRE_EQUAL(geo_info.det_id, original_det_id);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
