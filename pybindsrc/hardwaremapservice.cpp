@@ -56,7 +56,7 @@ register_hw_map_service(py::module& m)
 
     py_hwmapservice.def(py::init<std::string>());
 
-    py_hwmapservice
+    py_hwmapservice.def("get_all_hw_info", &HardwareMapService::get_all_hw_info)
         .def("get_hw_info_from_source_id", &HardwareMapService::get_hw_info_from_source_id)
         .def("get_hw_info_from_geo_id", &HardwareMapService::get_hw_info_from_geo_id)
       .def("get_geo_id", &HardwareMapService::get_geo_id)
