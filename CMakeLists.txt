@@ -5,13 +5,14 @@ find_package(daq-cmake REQUIRED)
 find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
 find_package(ers REQUIRED)
 find_package(logging REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 daq_setup_environment()
 
 ##############################################################################
 # Main library
 
-daq_add_library(*.cpp *.cxx LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
+daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
 
 ##############################################################################
 # Python bindings
@@ -37,6 +38,8 @@ daq_add_application( dummy_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detch
 # Unit Tests
 
 # daq_add_unit_test(... LINK_LIBRARIES ...)
+daq_add_unit_test(HardwareMapService_test LINK_LIBRARIES detchannelmaps)
+daq_add_unit_test(TPCChannelMap_test LINK_LIBRARIES detchannelmaps)
 
 ##############################################################################
 
