@@ -26,7 +26,7 @@ HardwareMapService::HardwareMapService(const std::string filename)
   std::string line;
   while (std::getline(inFile, line)) {
     HWInfo hw_info;
-    if (line.size() == 0 || line[0] == '#')
+    if (line.size() == 0 || line[line.find_first_not_of(" \t")] == '#')
       continue;
     std::stringstream linestream(line);
     linestream >> hw_info.dro_source_id >> hw_info.det_link >> hw_info.det_slot >> hw_info.det_crate >>
