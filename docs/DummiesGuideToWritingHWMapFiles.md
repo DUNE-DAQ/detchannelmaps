@@ -4,5 +4,5 @@
 
 Things to keep in mind:
 
-# Each row in the HardwareMap file will result in a DataLinkHandler (module) instance being created in the resulting system.
-# The number of Readout Apps is controlled by the unique combinations of DRO_Host and DRO_Card.  Given this, one needs to be careful to specify different DRO_Card values when creating HardwareMap files for smaller tests environments, on which several Readout Apps are desired on the same computer.
+1. Each row in the HardwareMap file will result in a DataLinkHandler (module) instance being created in the resulting system.
+2. The number of Readout Apps is controlled by the unique combinations of DRO_Host and DRO_Card.  Given this, one needs to be careful to specify different DRO_Card values when creating HardwareMap files for smaller tests environments, on which several Readout Apps are desired on the same computer.
