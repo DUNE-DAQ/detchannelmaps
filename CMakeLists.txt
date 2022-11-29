@@ -5,6 +5,7 @@ find_package(daq-cmake REQUIRED)
 find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
 find_package(ers REQUIRED)
 find_package(logging REQUIRED)
+find_package(serialization REQUIRED)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 daq_setup_environment()
@@ -12,7 +13,7 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging)
+daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging serialization::serialization)
 
 ##############################################################################
 # Python bindings

@@ -15,8 +15,9 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-HardwareMapService::HardwareMapService(const std::string filename)
+HardwareMapService::HardwareMapService(const std::string& filename)
 {
+  HardwareMap hw_map_from_file;
 
   std::ifstream inFile(filename, std::ios::in);
   if (inFile.bad() || inFile.fail() || !inFile.is_open()) {
@@ -33,6 +34,22 @@ HardwareMapService::HardwareMapService(const std::string filename)
       hw_info.det_id >> hw_info.dro_host >> hw_info.dro_card >> hw_info.dro_slr >> hw_info.dro_link;
     hw_info.is_valid = true;
     hw_info.geo_id = get_geo_id(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
+    hw_map_from_file.link_infos.push_back(hw_info);
+  }
+  inFile.close();
+
+  setup_maps(hw_map_from_file);
+}
+
+HardwareMapService::HardwareMapService(const HardwareMap& map)
+{
+  setup_maps(map);
+}
+
+void
+HardwareMapService::setup_maps(const HardwareMap& map)
+{
+  for (auto& hw_info : map.link_infos) {
     m_geo_id_to_info_map[hw_info.geo_id] = hw_info;
     auto sid = m_source_id_to_geo_ids_map.find(hw_info.dro_source_id);
     if (sid != m_source_id_to_geo_ids_map.end()) {
@@ -43,10 +60,8 @@ HardwareMapService::HardwareMapService(const std::string filename)
       m_source_id_to_geo_ids_map[hw_info.dro_source_id] = vec;
     }
   }
-  inFile.close();
 
   // DRO is defined by a host-card pair!
-  std::map<std::pair<std::string, uint16_t>, DROInfo> map;
 
   for (auto& gid : m_geo_id_to_info_map) {
     auto hwi = gid.second;
@@ -60,13 +75,13 @@ HardwareMapService::HardwareMapService(const std::string filename)
   }
 }
 
-std::vector<HardwareMapService::HWInfo>
-HardwareMapService::get_all_hw_info() const
+HardwareMapService::HardwareMap
+HardwareMapService::get_hardware_map() const
 {
-  std::vector<HWInfo> output;
+  HardwareMap output;
 
   for (auto& gid : m_geo_id_to_info_map) {
-    output.push_back(gid.second);
+    output.link_infos.push_back(gid.second);
   }
 
   return output;
@@ -139,6 +154,34 @@ HardwareMapService::get_dro_info(const std::string host_name, const uint16_t dro
   std::ostringstream s;
   s << "HardwareMapService: Invalid DRO host/card pair " << host_name << "/" << dro_card;
   throw std::runtime_error(s.str());
+}
+
+std::string
+HardwareMapService::get_serialized_hardware_map()
+{
+  auto map = get_hardware_map();
+  auto bytes = serialization::serialize(map, serialization::SerializationType::kJSON);
+
+  std::string serialized;
+  serialized.resize(bytes.size());
+ 
+  for (size_t ii = 0; ii < bytes.size(); ++ii) {
+    serialized[ii] = bytes[ii];
+  }
+
+  return serialized;
+}
+
+HardwareMapService::HardwareMap
+HardwareMapService::deserialize_hardware_map(const std::string& serialized)
+{
+  std::vector<uint8_t> bytes(serialized.size());
+
+  for (size_t ii = 0; ii < serialized.size(); ++ii) {
+    bytes[ii] = serialized[ii];
+  }
+
+  return serialization::deserialize<HardwareMap>(bytes);
 }
 
 } // namespace detchannelsmap
