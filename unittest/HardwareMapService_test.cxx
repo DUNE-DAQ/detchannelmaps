@@ -76,7 +76,8 @@ BOOST_AUTO_TEST_CASE(GeoInfo)
   uint16_t original_det_crate = 0xa5;
   uint16_t original_det_id = 0x5a;
 
-  uint64_t geo_id = detchannelmaps::HardwareMapService::get_geo_id(original_det_link, original_det_slot, original_det_crate, original_det_id);
+  uint64_t geo_id = detchannelmaps::HardwareMapService::get_geo_id(
+    original_det_link, original_det_slot, original_det_crate, original_det_id);
   detchannelmaps::HardwareMapService::GeoInfo geo_info = detchannelmaps::HardwareMapService::parse_geo_id(geo_id);
 
   BOOST_REQUIRE_EQUAL(geo_info.det_link, original_det_link);

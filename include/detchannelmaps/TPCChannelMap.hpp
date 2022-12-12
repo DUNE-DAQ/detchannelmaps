@@ -5,7 +5,6 @@
 #include "cetlib/compiler_macros.h"
 #include "ers/Issue.hpp"
 
-
 #ifndef EXTERN_C_FUNC_DECLARE_START
 // NOLINTNEXTLINE(build/define_used)
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
@@ -17,14 +16,13 @@
  * @param klass Class to be defined as a DUNE DAQ Module
  */
 // NOLINTNEXTLINE(build/define_used)
-#define DEFINE_DUNE_DET_CHANNEL_MAP(klass)                                                                                  \
+#define DEFINE_DUNE_DET_CHANNEL_MAP(klass)                                                                             \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap> make()                                                                  \
+  std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap> make()                                                       \
   {                                                                                                                    \
-    return std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap>(new klass());                                                  \
+    return std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap>(new klass());                                       \
   }                                                                                                                    \
   }
-
 
 namespace dunedaq {
 
@@ -32,10 +30,10 @@ namespace dunedaq {
 /**
  * @brief A ERS Issue for TPCChannelMap creation failure
  */
-ERS_DECLARE_ISSUE(detchannelmaps,                  ///< Namespace
-                  ChannelMapCreationFailed, ///< Type of the Issue
-                  "Failed to create TPCChannelMap of type " << plugin_name,          ///< Log Message from the issue
-                  ((std::string)plugin_name) ///< Message parameters
+ERS_DECLARE_ISSUE(detchannelmaps,                                           ///< Namespace
+                  ChannelMapCreationFailed,                                 ///< Type of the Issue
+                  "Failed to create TPCChannelMap of type " << plugin_name, ///< Log Message from the issue
+                  ((std::string)plugin_name)                                ///< Message parameters
 )
 
 namespace detchannelmaps {
@@ -43,7 +41,6 @@ namespace detchannelmaps {
 class TPCChannelMap
 {
 public:
-
   /**
    * @brief      Gets the offline channel from detector elements.
    *
@@ -60,13 +57,13 @@ public:
    * @brief TPCChannelMap destructor
    */
   virtual ~TPCChannelMap() noexcept = default;
-    
+
 protected:
-   /*
+  /*
    * @brief TPCChannelMap Constructor
    * @param name Name of the TPCChannelMap
    */
-  explicit TPCChannelMap(){}
+  explicit TPCChannelMap() {}
 };
 
 /**

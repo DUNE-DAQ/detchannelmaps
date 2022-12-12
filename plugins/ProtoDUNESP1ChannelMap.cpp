@@ -1,13 +1,14 @@
-#include "detchannelmaps/TPCChannelMap.hpp"
 #include "PdspChannelMapService.hpp"
+#include "detchannelmaps/TPCChannelMap.hpp"
 
 namespace dunedaq {
 namespace detchannelmaps {
 
-class ProtoDUNESP1ChannelMap :  public TPCChannelMap
+class ProtoDUNESP1ChannelMap : public TPCChannelMap
 {
 public:
-  explicit ProtoDUNESP1ChannelMap() {
+  explicit ProtoDUNESP1ChannelMap()
+  {
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
@@ -18,38 +19,36 @@ public:
     m_channel_map.reset(new PdspChannelMapService(channel_map_rce, channel_map_felix));
   }
 
-  ProtoDUNESP1ChannelMap(const ProtoDUNESP1ChannelMap&) = delete;            ///< ProtoDUNESP1ChannelMap is not copy-constructible
-  ProtoDUNESP1ChannelMap& operator=(const ProtoDUNESP1ChannelMap&) = delete; ///< ProtoDUNESP1ChannelMap is not copy-assignable
-  ProtoDUNESP1ChannelMap(ProtoDUNESP1ChannelMap&&) = delete;                 ///< ProtoDUNESP1ChannelMap is not move-constructible
-  ProtoDUNESP1ChannelMap& operator=(ProtoDUNESP1ChannelMap&&) = delete;      ///< ProtoDUNESP1ChannelMap is not move-assignable
+  ProtoDUNESP1ChannelMap(const ProtoDUNESP1ChannelMap&) = delete; ///< ProtoDUNESP1ChannelMap is not copy-constructible
+  ProtoDUNESP1ChannelMap& operator=(const ProtoDUNESP1ChannelMap&) =
+    delete;                                                  ///< ProtoDUNESP1ChannelMap is not copy-assignable
+  ProtoDUNESP1ChannelMap(ProtoDUNESP1ChannelMap&&) = delete; ///< ProtoDUNESP1ChannelMap is not move-constructible
+  ProtoDUNESP1ChannelMap& operator=(ProtoDUNESP1ChannelMap&&) =
+    delete; ///< ProtoDUNESP1ChannelMap is not move-assignable
 
-  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint cechan) final {
-      int fembchannel = cechan;
-      int wc = fiber*2 - 1;
-      if (fembchannel>127)
-        {
-          fembchannel -= 128;
-          wc++;
-        }
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint cechan) final
+  {
+    int fembchannel = cechan;
+    int wc = fiber * 2 - 1;
+    if (fembchannel > 127) {
+      fembchannel -= 128;
+      wc++;
+    }
 
     return m_channel_map->GetOfflineNumberFromDetectorElements(
-        crate+1, slot, wc, fembchannel, PdspChannelMapService::kFELIX
-    );
+      crate + 1, slot, wc, fembchannel, PdspChannelMapService::kFELIX);
   }
 
-  uint get_plane_from_offline_channel(uint offchannel) final {
+  uint get_plane_from_offline_channel(uint offchannel) final
+  {
     return m_channel_map->PlaneFromOfflineChannel(offchannel);
   };
 
 private:
-
   std::unique_ptr<PdspChannelMapService> m_channel_map;
-
-  
 };
 
 DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::ProtoDUNESP1ChannelMap)
-
 
 } // namespace detchannelmaps
 } // namespace dunedaq

@@ -1,13 +1,14 @@
-#include "detchannelmaps/TPCChannelMap.hpp"
 #include "VDColdboxChannelMapService.hpp"
+#include "detchannelmaps/TPCChannelMap.hpp"
 
 namespace dunedaq {
 namespace detchannelmaps {
 
-class VDColdboxChannelMap :  public TPCChannelMap
+class VDColdboxChannelMap : public TPCChannelMap
 {
 public:
-  explicit VDColdboxChannelMap() {
+  explicit VDColdboxChannelMap()
+  {
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
@@ -17,22 +18,22 @@ public:
     m_channel_map.reset(new VDColdboxChannelMapService(channel_map_file));
   }
 
-  VDColdboxChannelMap(const VDColdboxChannelMap&) = delete;            ///< VDColdboxChannelMap is not copy-constructible
+  VDColdboxChannelMap(const VDColdboxChannelMap&) = delete; ///< VDColdboxChannelMap is not copy-constructible
   VDColdboxChannelMap& operator=(const VDColdboxChannelMap&) = delete; ///< VDColdboxChannelMap is not copy-assignable
-  VDColdboxChannelMap(VDColdboxChannelMap&&) = delete;                 ///< VDColdboxChannelMap is not move-constructible
-  VDColdboxChannelMap& operator=(VDColdboxChannelMap&&) = delete;      ///< VDColdboxChannelMap is not move-assignable
+  VDColdboxChannelMap(VDColdboxChannelMap&&) = delete;            ///< VDColdboxChannelMap is not move-constructible
+  VDColdboxChannelMap& operator=(VDColdboxChannelMap&&) = delete; ///< VDColdboxChannelMap is not move-assignable
 
-  uint get_offline_channel_from_crate_slot_fiber_chan(uint /*crate*/, uint slot, uint fiber, uint fembchannel) final {
+  uint get_offline_channel_from_crate_slot_fiber_chan(uint /*crate*/, uint slot, uint fiber, uint fembchannel) final
+  {
 
-    return m_channel_map->getOfflChanFromSlotFiberChan(
-        slot, fiber, fembchannel
-    );
+    return m_channel_map->getOfflChanFromSlotFiberChan(slot, fiber, fembchannel);
   }
 
-  uint get_plane_from_offline_channel(uint offchannel) final {
+  uint get_plane_from_offline_channel(uint offchannel) final
+  {
     auto chan_info = m_channel_map->getChanInfoFromOfflChan(offchannel);
 
-    switch(chan_info.stripid[0]) {
+    switch (chan_info.stripid[0]) {
       case 'U':
         return 0;
       case 'Y':
@@ -41,18 +42,14 @@ public:
         return 2;
       default:
         return 9999;
-      }
+    }
   };
 
 private:
-
   std::unique_ptr<VDColdboxChannelMapService> m_channel_map;
-
-  
 };
 
 DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::VDColdboxChannelMap)
-
 
 } // namespace detchannelmaps
 } // namespace dunedaq

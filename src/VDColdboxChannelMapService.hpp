@@ -4,25 +4,26 @@
 // File:        VDColdboxChannelMapService.h
 // Author:      Tom Junk, October 2021
 //
-// Implementation of hardware-offline channel mapping reading from a file.  
+// Implementation of hardware-offline channel mapping reading from a file.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef DETCHANNELSMAP_VDCOLDBOXCHANNELMAPSERVICE_H_
 #define DETCHANNELSMAP_VDCOLDBOXCHANNELMAPSERVICE_H_
 
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 namespace dunedaq {
 namespace detchannelmaps {
 
-class VDColdboxChannelMapService {
+class VDColdboxChannelMapService
+{
 
- public:
-
+public:
   VDColdboxChannelMapService(std::string mapfile);
 
-  struct VDCBChanInfo {
+  struct VDCBChanInfo
+  {
     int offlchan;        // in gdml and channel sorting convention
     int wib;             // slot number +1:    1, 2, 3, or 4
     int wibconnector;    // which board on the WIB  1, 2, 3, or 4
@@ -31,13 +32,13 @@ class VDColdboxChannelMapService {
     int asic;            // ASIC:   1 to 8
     int asicchan;        // ASIC channel:  0 to 15
     int connector;       // detector connector
-    std::string stripid;  // strip name, with plane and number.  e.g. U79
+    std::string stripid; // strip name, with plane and number.  e.g. U79
     bool valid;          // true if valid, false if not
   };
 
   // Access methods
 
-  // The function below gets cold electronics info from offline channel number.  Sets valid to be false if 
+  // The function below gets cold electronics info from offline channel number.  Sets valid to be false if
   // there is no corresponding cold electronics channel
 
   VDCBChanInfo getChanInfoFromOfflChan(int offlchan);
@@ -52,17 +53,14 @@ class VDColdboxChannelMapService {
 
   int getOfflChanFromSlotFiberChan(int slot, int fiber, int chan);
 
-
- private:
-
+private:
   //  map so we can look up channel info by offline channel number
 
-  std::unordered_map<int,VDCBChanInfo> chantoinfomap;
+  std::unordered_map<int, VDCBChanInfo> chantoinfomap;
 
   // map so we can look up offline channel number by channel info  (three keys), wib, wibconnector, and cechan
 
-  std::unordered_map<int,std::unordered_map<int,std::unordered_map<int,int> > > infotochanmap;
-
+  std::unordered_map<int, std::unordered_map<int, std::unordered_map<int, int>>> infotochanmap;
 };
 
 } // namespace detchannelmaps
