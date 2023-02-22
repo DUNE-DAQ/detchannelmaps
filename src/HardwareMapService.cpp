@@ -8,6 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "detchannelmaps/HardwareMapService.hpp"
+#include "detchannelmaps/hardwaremapservice/Nljs.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -32,8 +33,7 @@ HardwareMapService::HardwareMapService(const std::string& filename)
     std::stringstream linestream(line);
     linestream >> hw_info.dro_source_id >> hw_info.det_link >> hw_info.det_slot >> hw_info.det_crate >>
       hw_info.det_id >> hw_info.dro_host >> hw_info.dro_card >> hw_info.dro_slr >> hw_info.dro_link;
-    hw_info.is_valid = true;
-    hw_info.geo_id = get_geo_id(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
+    hw_info.from_file = true;
     hw_map_from_file.link_infos.push_back(hw_info);
   }
   inFile.close();
@@ -50,7 +50,7 @@ void
 HardwareMapService::setup_maps(const HardwareMap& map)
 {
   for (auto& hw_info : map.link_infos) {
-    m_geo_id_to_info_map[hw_info.geo_id] = hw_info;
+    m_geo_id_to_info_map[get_geo_id(hw_info)] = hw_info;
     auto sid = m_source_id_to_geo_ids_map.find(hw_info.dro_source_id);
     if (sid != m_source_id_to_geo_ids_map.end()) {
       sid->second.push_back(hw_info);
@@ -75,7 +75,7 @@ HardwareMapService::setup_maps(const HardwareMap& map)
   }
 }
 
-HardwareMapService::HardwareMap
+HardwareMap
 HardwareMapService::get_hardware_map() const
 {
   HardwareMap output;
@@ -87,7 +87,16 @@ HardwareMapService::get_hardware_map() const
   return output;
 }
 
-std::vector<HardwareMapService::HWInfo>
+std::string
+HardwareMapService::get_hardware_map_json() const
+{
+  auto hwm = get_hardware_map();
+  nlohmann::json j;
+  hardwaremapservice::to_json(j, hwm);
+  return to_string(j);
+}
+
+std::vector<HWInfo>
 HardwareMapService::get_hw_info_from_source_id(const uint32_t dro_source_id) const
 {
   auto sid = m_source_id_to_geo_ids_map.find(dro_source_id);
@@ -97,7 +106,7 @@ HardwareMapService::get_hw_info_from_source_id(const uint32_t dro_source_id) con
   return std::vector<HWInfo>();
 }
 
-HardwareMapService::HWInfo
+HWInfo
 HardwareMapService::get_hw_info_from_geo_id(const uint64_t geo_id) const
 {
   auto gid = m_geo_id_to_info_map.find(geo_id);
@@ -105,8 +114,13 @@ HardwareMapService::get_hw_info_from_geo_id(const uint64_t geo_id) const
     return gid->second;
   }
   HWInfo hw_info;
-  hw_info.is_valid = false;
+  hw_info.from_file = false;
   return hw_info;
+}
+
+uint64_t
+HardwareMapService::get_geo_id(const HWInfo hw_info) {
+    return get_geo_id(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
 }
 
 uint64_t
@@ -120,7 +134,7 @@ HardwareMapService::get_geo_id(const uint16_t det_link,
   return geoid;
 }
 
-HardwareMapService::GeoInfo
+GeoInfo
 HardwareMapService::parse_geo_id(const uint64_t geo_id)
 {
   GeoInfo geo_info;
@@ -131,7 +145,7 @@ HardwareMapService::parse_geo_id(const uint64_t geo_id)
   return geo_info;
 }
 
-std::vector<HardwareMapService::DROInfo>
+std::vector<DROInfo>
 HardwareMapService::get_all_dro_info() const
 {
   std::vector<DROInfo> output;
@@ -142,7 +156,7 @@ HardwareMapService::get_all_dro_info() const
   return output;
 }
 
-HardwareMapService::DROInfo
+DROInfo
 HardwareMapService::get_dro_info(const std::string host_name, const uint16_t dro_card) const
 {
   auto key = std::make_pair(host_name, dro_card);
@@ -154,34 +168,6 @@ HardwareMapService::get_dro_info(const std::string host_name, const uint16_t dro
   std::ostringstream s;
   s << "HardwareMapService: Invalid DRO host/card pair " << host_name << "/" << dro_card;
   throw std::runtime_error(s.str());
-}
-
-std::string
-HardwareMapService::get_serialized_hardware_map()
-{
-  auto map = get_hardware_map();
-  auto bytes = serialization::serialize(map, serialization::SerializationType::kJSON);
-
-  std::string serialized;
-  serialized.resize(bytes.size());
- 
-  for (size_t ii = 0; ii < bytes.size(); ++ii) {
-    serialized[ii] = bytes[ii];
-  }
-
-  return serialized;
-}
-
-HardwareMapService::HardwareMap
-HardwareMapService::deserialize_hardware_map(const std::string& serialized)
-{
-  std::vector<uint8_t> bytes(serialized.size());
-
-  for (size_t ii = 0; ii < serialized.size(); ++ii) {
-    bytes[ii] = serialized[ii];
-  }
-
-  return serialization::deserialize<HardwareMap>(bytes);
 }
 
 } // namespace detchannelsmap

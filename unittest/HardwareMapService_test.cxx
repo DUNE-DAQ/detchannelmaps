@@ -48,12 +48,11 @@ BOOST_AUTO_TEST_CASE(Basics)
   BOOST_REQUIRE_EQUAL(hw_infos.size(), 0);
 
   auto hw_info = ms.get_hw_info_from_geo_id(0);
-  BOOST_REQUIRE(!hw_info.is_valid);
+  BOOST_REQUIRE(!hw_info.from_file);
 
   auto geo_id = ms.get_geo_id(0, 0, 1, 3);
   hw_info = ms.get_hw_info_from_geo_id(geo_id);
-  BOOST_REQUIRE(hw_info.is_valid);
-  BOOST_REQUIRE_EQUAL(hw_info.geo_id, geo_id);
+  BOOST_REQUIRE(hw_info.from_file);
   BOOST_REQUIRE_EQUAL(hw_info.det_link, 0);
   BOOST_REQUIRE_EQUAL(hw_info.det_slot, 0);
   BOOST_REQUIRE_EQUAL(hw_info.det_crate, 1);
@@ -77,27 +76,12 @@ BOOST_AUTO_TEST_CASE(GeoInfo)
   uint16_t original_det_id = 0x5a;
 
   uint64_t geo_id = detchannelmaps::HardwareMapService::get_geo_id(original_det_link, original_det_slot, original_det_crate, original_det_id);
-  detchannelmaps::HardwareMapService::GeoInfo geo_info = detchannelmaps::HardwareMapService::parse_geo_id(geo_id);
+  detchannelmaps::GeoInfo geo_info = detchannelmaps::HardwareMapService::parse_geo_id(geo_id);
 
   BOOST_REQUIRE_EQUAL(geo_info.det_link, original_det_link);
   BOOST_REQUIRE_EQUAL(geo_info.det_slot, original_det_slot);
   BOOST_REQUIRE_EQUAL(geo_info.det_crate, original_det_crate);
   BOOST_REQUIRE_EQUAL(geo_info.det_id, original_det_id);
-}
-
-BOOST_AUTO_TEST_CASE(Serialization) {
-
-  detchannelmaps::HardwareMapService ms(GetTestFileName());
-
-  auto bytes = ms.get_serialized_hardware_map();
-  BOOST_REQUIRE_GT(bytes.size(), 0);
-
-  auto des_map = detchannelmaps::HardwareMapService::deserialize_hardware_map(bytes);
-  BOOST_REQUIRE_EQUAL(des_map.link_infos.size(), 20);
-
-  detchannelmaps::HardwareMapService ms2(des_map);
-  auto s2_map = ms2.get_hardware_map();
-  BOOST_REQUIRE_EQUAL(s2_map.link_infos.size(), 20);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
