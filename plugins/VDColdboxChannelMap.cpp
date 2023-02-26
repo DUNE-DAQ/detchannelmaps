@@ -50,6 +50,33 @@ public:
     return chan_info.plane;
   };
 
+  // std::optional<TPCCoords> 
+  // get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
+  //   auto ci = m_channel_map->getChanInfoFromOfflChan(offchannel);
+
+  //   // return ci.valid ? std::optional<TPCCoords>{4, ci.wib-1, (ci.wibconnector+1)/2, ci.cebchan} : std::nullopt;
+  //   return std::nullopt;
+  // }
+
+  std::optional<TPCCoords> 
+  get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
+    auto ci = m_channel_map->getChanInfoFromOfflChan(offchannel);
+
+    if ( !ci.valid) {
+      return std::nullopt;
+    }
+    // wc = (fiber*2 - 1) + (chan > 127);
+    // cechan = chan % 128
+
+    // ((wc+1) % 2) == 0 //
+
+    // fibre = 1 -> wc = 1 (0-127),2 (0-127)
+    // fibre = 2 -> wc = 3,4
+
+
+    // std::cout << ci.wib << "   " << ci.wibconnector << "   " <<  ci.cebchan <<  std::endl;
+    return TPCCoords{4, ci.wib-1, (ci.wibconnector+1)/2, ci.cebchan+128*((ci.wibconnector+1)%2)};
+  }
 private:
 
   std::unique_ptr<dune::PD2HDChannelMapSP> m_channel_map;

@@ -48,6 +48,10 @@ public:
     return 2;
   }
 
+  std::optional<TPCCoords> 
+  get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
+    return TPCCoords{1, 2, 3, 4};
+  }
 
 };
 

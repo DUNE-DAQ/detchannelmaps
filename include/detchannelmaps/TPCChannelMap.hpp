@@ -4,6 +4,7 @@
 #include "cetlib/BasicPluginFactory.h"
 #include "cetlib/compiler_macros.h"
 #include "ers/Issue.hpp"
+#include <optional>
 
 
 #ifndef EXTERN_C_FUNC_DECLARE_START
@@ -44,18 +45,27 @@ class TPCChannelMap
 {
 public:
 
+  struct TPCCoords
+  {
+    uint crate;
+    uint slot;
+    uint fiber;
+    uint channel;
+  };
+
   /**
    * @brief      Gets the offline channel from detector elements.
    *
    * @param[in]  crate        The crate
    * @param[in]  slot         The slot
    * @param[in]  fiber        The fiber
-   * @param[in]  fembchannel  The fembchannel
+   * @param[in]  fembchannel  The channel
    *
    * @return     The offline channel from detector elements.
    */
-  virtual uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint fembchannel) = 0;
+  virtual uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint channel) = 0;
   virtual uint get_plane_from_offline_channel(uint offchannel) = 0;
+  virtual std::optional<TPCCoords> get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) = 0;
   /**
    * @brief TPCChannelMap destructor
    */

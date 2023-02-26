@@ -41,6 +41,10 @@ public:
     return m_channel_map->PlaneFromOfflineChannel(offchannel);
   };
 
+  std::optional<TPCCoords> 
+  get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
+    return std::nullopt;
+  }
 private:
 
   std::unique_ptr<PdspChannelMapService> m_channel_map;
