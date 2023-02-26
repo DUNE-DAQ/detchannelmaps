@@ -36,7 +36,7 @@ public:
 
             uint off_chan = get_offline_channel_from_crate_slot_fiber_chan(i_crate, i_slots, i_fiber, i_chan);
             
-            std::cout << off_chan << "   " << i_crate << "   " <<  i_slots <<  "   " << i_fiber << std::endl;
+            // std::cout << off_chan << "   " << i_crate << "   " <<  i_slots <<  "   " << i_fiber << std::endl;
             m_offchan_to_coords_map[off_chan] = TPCCoords{i_crate, i_slots, i_fiber, i_chan};
           }
         }
