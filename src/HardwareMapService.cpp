@@ -8,6 +8,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "detchannelmaps/HardwareMapService.hpp"
+#include "detchannelmaps/hardwaremapservice/Nljs.hpp"
 
 #include <fstream>
 #include <sstream>
@@ -15,8 +16,9 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-HardwareMapService::HardwareMapService(const std::string filename)
+HardwareMapService::HardwareMapService(const std::string& filename)
 {
+  HardwareMap hw_map_from_file;
 
   std::ifstream inFile(filename, std::ios::in);
   if (inFile.bad() || inFile.fail() || !inFile.is_open()) {
@@ -31,9 +33,24 @@ HardwareMapService::HardwareMapService(const std::string filename)
     std::stringstream linestream(line);
     linestream >> hw_info.dro_source_id >> hw_info.det_link >> hw_info.det_slot >> hw_info.det_crate >>
       hw_info.det_id >> hw_info.dro_host >> hw_info.dro_card >> hw_info.dro_slr >> hw_info.dro_link;
-    hw_info.is_valid = true;
-    hw_info.geo_id = get_geo_id(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
-    m_geo_id_to_info_map[hw_info.geo_id] = hw_info;
+    hw_info.from_file = true;
+    hw_map_from_file.link_infos.push_back(hw_info);
+  }
+  inFile.close();
+
+  setup_maps(hw_map_from_file);
+}
+
+HardwareMapService::HardwareMapService(const HardwareMap& map)
+{
+  setup_maps(map);
+}
+
+void
+HardwareMapService::setup_maps(const HardwareMap& map)
+{
+  for (auto& hw_info : map.link_infos) {
+    m_geo_id_to_info_map[get_geo_id(hw_info)] = hw_info;
     auto sid = m_source_id_to_geo_ids_map.find(hw_info.dro_source_id);
     if (sid != m_source_id_to_geo_ids_map.end()) {
       sid->second.push_back(hw_info);
@@ -43,10 +60,8 @@ HardwareMapService::HardwareMapService(const std::string filename)
       m_source_id_to_geo_ids_map[hw_info.dro_source_id] = vec;
     }
   }
-  inFile.close();
 
   // DRO is defined by a host-card pair!
-  std::map<std::pair<std::string, uint16_t>, DROInfo> map;
 
   for (auto& gid : m_geo_id_to_info_map) {
     auto hwi = gid.second;
@@ -60,19 +75,28 @@ HardwareMapService::HardwareMapService(const std::string filename)
   }
 }
 
-std::vector<HardwareMapService::HWInfo>
-HardwareMapService::get_all_hw_info() const
+HardwareMap
+HardwareMapService::get_hardware_map() const
 {
-  std::vector<HWInfo> output;
+  HardwareMap output;
 
   for (auto& gid : m_geo_id_to_info_map) {
-    output.push_back(gid.second);
+    output.link_infos.push_back(gid.second);
   }
 
   return output;
 }
 
-std::vector<HardwareMapService::HWInfo>
+std::string
+HardwareMapService::get_hardware_map_json() const
+{
+  auto hwm = get_hardware_map();
+  nlohmann::json j;
+  hardwaremapservice::to_json(j, hwm);
+  return to_string(j);
+}
+
+std::vector<HWInfo>
 HardwareMapService::get_hw_info_from_source_id(const uint32_t dro_source_id) const
 {
   auto sid = m_source_id_to_geo_ids_map.find(dro_source_id);
@@ -82,7 +106,7 @@ HardwareMapService::get_hw_info_from_source_id(const uint32_t dro_source_id) con
   return std::vector<HWInfo>();
 }
 
-HardwareMapService::HWInfo
+HWInfo
 HardwareMapService::get_hw_info_from_geo_id(const uint64_t geo_id) const
 {
   auto gid = m_geo_id_to_info_map.find(geo_id);
@@ -90,8 +114,13 @@ HardwareMapService::get_hw_info_from_geo_id(const uint64_t geo_id) const
     return gid->second;
   }
   HWInfo hw_info;
-  hw_info.is_valid = false;
+  hw_info.from_file = false;
   return hw_info;
+}
+
+uint64_t
+HardwareMapService::get_geo_id(const HWInfo hw_info) {
+    return get_geo_id(hw_info.det_link, hw_info.det_slot, hw_info.det_crate, hw_info.det_id);
 }
 
 uint64_t
@@ -105,7 +134,7 @@ HardwareMapService::get_geo_id(const uint16_t det_link,
   return geoid;
 }
 
-HardwareMapService::GeoInfo
+GeoInfo
 HardwareMapService::parse_geo_id(const uint64_t geo_id)
 {
   GeoInfo geo_info;
@@ -116,7 +145,7 @@ HardwareMapService::parse_geo_id(const uint64_t geo_id)
   return geo_info;
 }
 
-std::vector<HardwareMapService::DROInfo>
+std::vector<DROInfo>
 HardwareMapService::get_all_dro_info() const
 {
   std::vector<DROInfo> output;
@@ -127,7 +156,7 @@ HardwareMapService::get_all_dro_info() const
   return output;
 }
 
-HardwareMapService::DROInfo
+DROInfo
 HardwareMapService::get_dro_info(const std::string host_name, const uint16_t dro_card) const
 {
   auto key = std::make_pair(host_name, dro_card);
