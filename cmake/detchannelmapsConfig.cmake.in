@@ -6,6 +6,7 @@ include(CMakeFindDependencyMacro)
 find_dependency(ers)
 find_dependency(logging)
 find_dependency(cetlib)
+find_dependency(serialization)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/@PROJECT_NAME@)
 
