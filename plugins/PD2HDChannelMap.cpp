@@ -9,7 +9,9 @@ namespace detchannelmaps {
 class PD2HDChannelMap :  public TPCChannelMap
 {
 public:
+
   explicit PD2HDChannelMap() {
+  
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
@@ -26,7 +28,9 @@ public:
   PD2HDChannelMap(PD2HDChannelMap&&) = delete;                 ///< PD2HDChannelMap is not move-constructible
   PD2HDChannelMap& operator=(PD2HDChannelMap&&) = delete;      ///< PD2HDChannelMap is not move-assignable
 
-  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint link, uint wibframechan) final {
+
+  uint 
+  get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint link, uint wibframechan) final {
 
     auto chan_info = m_channel_map->GetChanInfoFromWIBElements(
         crate, slot, link, wibframechan
@@ -40,7 +44,9 @@ public:
 
   }
 
-  uint get_plane_from_offline_channel(uint offchannel) final {
+
+  uint 
+  get_plane_from_offline_channel(uint offchannel) final {
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
@@ -49,6 +55,19 @@ public:
 
     return chan_info.plane;
   };
+
+
+  std::optional<TPCCoords> 
+  get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
+    auto ci = m_channel_map->GetChanInfoFromOfflChan(offchannel);
+
+    if ( !ci.valid) {
+      return std::nullopt;
+    }
+    return TPCCoords{ci.crate, ci.wib-1, ci.link, ci.wibframechan};
+  }
+
+
 
 private:
 
