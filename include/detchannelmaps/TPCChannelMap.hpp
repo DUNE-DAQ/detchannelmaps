@@ -64,6 +64,17 @@ public:
    * @return     The offline channel from detector elements.
    */
   virtual uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint channel) = 0;
+  virtual uint get_offline_channel_from_crate_slot_stream_chan(uint crate, uint slot, uint stream, uint channel) {
+    
+    constexpr uint n_chan_per_stream = 64;
+    constexpr uint n_streams_per_link = 4;
+
+    uint link = (stream >> 6);
+    uint substream = (stream & 0x3f);
+    uint ch = n_chan_per_stream*substream+channel;
+    return this->get_offline_channel_from_crate_slot_fiber_chan(crate, slot, link, ch);
+
+  };
   virtual uint get_plane_from_offline_channel(uint offchannel) = 0;
   virtual std::optional<TPCCoords> get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) = 0;
   /**
