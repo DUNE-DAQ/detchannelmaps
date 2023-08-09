@@ -38,6 +38,11 @@ ERS_DECLARE_ISSUE(detchannelmaps,                  ///< Namespace
                   "Failed to create TPCChannelMap of type " << plugin_name,          ///< Log Message from the issue
                   ((std::string)plugin_name) ///< Message parameters
 )
+ERS_DECLARE_ISSUE(detchannelmaps,                  ///< Namespace
+                  InvalidStream, ///< Type of the Issue
+                  "Invalid stream number " << stream,          ///< Log Message from the issue
+                  ((uint)stream) ///< Message parameters
+)
 
 namespace detchannelmaps {
 
@@ -65,6 +70,9 @@ public:
    */
   virtual uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint channel) = 0;
   virtual uint get_offline_channel_from_crate_slot_stream_chan(uint crate, uint slot, uint stream, uint channel) {
+
+    //if stream number looks wrong (not 0,1,2,3 or 64,65,66,67)
+    if( (stream & 0xbc) ) throw InvalidStream(ERS_HERE, stream);
     
     constexpr uint n_chan_per_stream = 64;
 
