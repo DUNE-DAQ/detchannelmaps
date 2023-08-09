@@ -67,11 +67,10 @@ public:
   virtual uint get_offline_channel_from_crate_slot_stream_chan(uint crate, uint slot, uint stream, uint channel) {
     
     constexpr uint n_chan_per_stream = 64;
-    constexpr uint n_streams_per_link = 4;
 
-    uint link = (stream >> 6);
-    uint substream = (stream & 0x3f);
-    uint ch = n_chan_per_stream*substream+channel;
+    uint link = (stream >> 6) & 1;
+    uint locstream = (stream & 0x3);
+    uint ch = n_chan_per_stream*locstream+channel;
     return this->get_offline_channel_from_crate_slot_fiber_chan(crate, slot, link, ch);
 
   };
