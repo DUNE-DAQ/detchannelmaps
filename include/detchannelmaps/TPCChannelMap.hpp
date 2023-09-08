@@ -83,6 +83,7 @@ public:
 
   };
   virtual uint get_plane_from_offline_channel(uint offchannel) = 0;
+  virtual std::string get_apa_from_offline_channel(uint ) { return ""; }
   virtual std::optional<TPCCoords> get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) = 0;
   /**
    * @brief TPCChannelMap destructor
