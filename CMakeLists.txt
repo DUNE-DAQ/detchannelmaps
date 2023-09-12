@@ -42,7 +42,6 @@ daq_add_application( dummy_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detch
 # Unit Tests
 
 # daq_add_unit_test(... LINK_LIBRARIES ...)
-daq_add_unit_test(HardwareMapService_test LINK_LIBRARIES detchannelmaps)
 daq_add_unit_test(TPCChannelMap_test LINK_LIBRARIES detchannelmaps)
 
 ##############################################################################

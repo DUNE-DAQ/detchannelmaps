@@ -23,7 +23,6 @@ PYBIND11_MODULE(_daq_detchannelmaps_py, m) {
     m.doc() = "c++ implementation of the dunedaq detchannelmaps modules"; // optional module docstring
 
     register_maps(m);
-    register_hw_map_service(m);
 }
 
 } // namespace python
