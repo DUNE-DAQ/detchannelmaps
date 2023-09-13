@@ -45,6 +45,22 @@ void dune::PD2HDChannelMapSP::ReadMapFromFile(std::string &fullname)
 
     chanInfo.valid = true;
 
+      std::cout 
+      << " offlchan " << chanInfo.offlchan 
+      << " crate " << chanInfo.crate 
+      << " APAName" << chanInfo.APAName
+      << " wib " << chanInfo.wib 
+      << " link " << chanInfo.link 
+      << " femb_on_link" << chanInfo.femb_on_link 
+      << " cebchan " << chanInfo.cebchan 
+      << " plane " << chanInfo.plane 
+      << " chan_in_plan" << chanInfo.chan_in_plane 
+      << " femb " << chanInfo.femb 
+      << " asic " << chanInfo.asic 
+      << " asicchan" << chanInfo.asicchan
+      << " wibframechan" << chanInfo.wibframechan
+      << std::endl;
+
     // fill maps.
 
     check_offline_channel(chanInfo.offlchan);
