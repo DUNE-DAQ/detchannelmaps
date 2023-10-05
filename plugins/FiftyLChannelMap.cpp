@@ -6,31 +6,36 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-class VDColdboxChannelMap :  public TPCChannelMap
+class FiftyLChannelMap :  public TPCChannelMap
 {
 public:
-  explicit VDColdboxChannelMap() {
+
+  explicit FiftyLChannelMap() {
+  
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
     }
     std::string detchannelmaps_share(detchannelmaps_share_cstr);
-    std::string channel_map_file = detchannelmaps_share + "/config/vdcoldbox/vdcbce_chanmap_v4.txt";
+    std::string channel_map_file = detchannelmaps_share + "/config/50L/50LChannelMap_v1.txt";
     m_channel_map.reset(new dune::PD2HDChannelMapSP());
     m_channel_map->ReadMapFromFile(channel_map_file);
-    TLOG_DEBUG(10) << "VDColdboxChannelMap Created";
+    TLOG_DEBUG(10) << "FiftyLChannelMap Created";
   }
 
-  VDColdboxChannelMap(const VDColdboxChannelMap&) = delete;            ///< VDColdboxChannelMap is not copy-constructible
-  VDColdboxChannelMap& operator=(const VDColdboxChannelMap&) = delete; ///< VDColdboxChannelMap is not copy-assignable
-  VDColdboxChannelMap(VDColdboxChannelMap&&) = delete;                 ///< VDColdboxChannelMap is not move-constructible
-  VDColdboxChannelMap& operator=(VDColdboxChannelMap&&) = delete;      ///< VDColdboxChannelMap is not move-assignable
+  FiftyLChannelMap(const FiftyLChannelMap&) = delete;            ///< FiftyLChannelMap is not copy-constructible
+  FiftyLChannelMap& operator=(const FiftyLChannelMap&) = delete; ///< FiftyLChannelMap is not copy-assignable
+  FiftyLChannelMap(FiftyLChannelMap&&) = delete;                 ///< FiftyLChannelMap is not move-constructible
+  FiftyLChannelMap& operator=(FiftyLChannelMap&&) = delete;      ///< FiftyLChannelMap is not move-assignable
 
-  uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint link, uint wibframechan) final {
+
+  uint 
+  get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint link, uint wibframechan) final {
 
     auto chan_info = m_channel_map->GetChanInfoFromWIBElements(
         crate, slot, link, wibframechan
     );
+
 
     if (!chan_info.valid) {
       return -1;
@@ -40,7 +45,9 @@ public:
 
   }
 
-  uint get_plane_from_offline_channel(uint offchannel) final {
+
+  uint 
+  get_plane_from_offline_channel(uint offchannel) final {
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
@@ -49,6 +56,7 @@ public:
 
     return chan_info.plane;
   };
+
 
   std::optional<TPCCoords> 
   get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
@@ -59,6 +67,9 @@ public:
     }
     return TPCCoords{ci.crate, ci.wib-1, ci.link, ci.wibframechan};
   }
+
+
+
 private:
 
   std::unique_ptr<dune::PD2HDChannelMapSP> m_channel_map;
@@ -66,7 +77,7 @@ private:
   
 };
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::VDColdboxChannelMap)
+DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::FiftyLChannelMap)
 
 
 } // namespace detchannelmaps

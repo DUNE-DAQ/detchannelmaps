@@ -44,7 +44,7 @@ void dune::PD2HDChannelMapSP::ReadMapFromFile(std::string &fullname)
       >> chanInfo.wibframechan; 
 
     chanInfo.valid = true;
-
+    
     // fill maps.
 
     check_offline_channel(chanInfo.offlchan);
