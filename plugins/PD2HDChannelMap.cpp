@@ -56,6 +56,16 @@ public:
     return chan_info.plane;
   };
 
+  std::string 
+  get_tpc_element_from_offline_channel(uint offchannel) final {
+    auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
+
+    if (!chan_info.valid) {
+      return "";
+    }
+
+    return chan_info.APAName;
+  };
 
   std::optional<TPCCoords> 
   get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
