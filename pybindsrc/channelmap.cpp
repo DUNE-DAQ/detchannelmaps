@@ -33,7 +33,7 @@ register_maps(py::module& m)
 
   py::class_<TPCChannelMap, std::shared_ptr<TPCChannelMap>>(m, "TPCChannelMap")
     .def("get_plane_from_offline_channel", &TPCChannelMap::get_plane_from_offline_channel)
-    .def("get_apa_from_offline_channel", &TPCChannelMap::get_apa_from_offline_channel)
+    .def("get_tpc_element_from_offline_channel", &TPCChannelMap::get_tpc_element_from_offline_channel)
     .def("get_offline_channel_from_crate_slot_fiber_chan", &TPCChannelMap::get_offline_channel_from_crate_slot_fiber_chan)
     .def("get_offline_channel_from_crate_slot_stream_chan", &TPCChannelMap::get_offline_channel_from_crate_slot_stream_chan)
     .def("get_crate_slot_fiber_chan_from_offline_channel", &TPCChannelMap::get_crate_slot_fiber_chan_from_offline_channel)

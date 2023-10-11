@@ -57,7 +57,7 @@ public:
   };
 
   std::string 
-  get_apa_from_offline_channel(uint offchannel) final {
+  get_tpc_element_from_offline_channel(uint offchannel) final {
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
