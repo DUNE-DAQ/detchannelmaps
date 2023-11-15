@@ -10,7 +10,7 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 daq_setup_environment()
 
-daq_codegen( *.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
+#daq_codegen( *.jsonnet TEMPLATES Structs.hpp.j2 Nljs.hpp.j2 )
 
 ##############################################################################
 # Main library
