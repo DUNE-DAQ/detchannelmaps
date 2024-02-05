@@ -29,6 +29,7 @@ daq_add_plugin( PD2HDChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2VDBottomTPCChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( FiftyLChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( HDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( ICEBERGChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Integration tests
