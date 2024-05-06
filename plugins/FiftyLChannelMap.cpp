@@ -17,7 +17,8 @@ public:
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
     }
     std::string detchannelmaps_share(detchannelmaps_share_cstr);
-    std::string channel_map_file = detchannelmaps_share + "/config/50L/50LChannelMap_v1.txt";
+    //std::string channel_map_file = detchannelmaps_share + "/config/50L/50LChannelMap_v1.txt";
+    std::string channel_map_file = detchannelmaps_share + "/config/50L/50LChannelMap_v2.txt";
     m_channel_map.reset(new dune::PD2HDChannelMapSP());
     m_channel_map->ReadMapFromFile(channel_map_file);
     TLOG_DEBUG(10) << "FiftyLChannelMap Created";
