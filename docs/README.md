@@ -9,3 +9,5 @@ A table of available channel map plugins is listed [here](channel-maps-table.md)
 cat CMakeLists.txt | sed -n "s/.*( \([^ ]*ChannelMap\).*/\1/p"
 ```
 to see the channel maps that are being built (this may be a useful cross-check).
+
+An example of using the channel maps plugin can be seen in [dummy_map_test.cxx](/test/apps/dummy_map_test.cxx).
