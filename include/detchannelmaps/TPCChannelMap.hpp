@@ -4,6 +4,7 @@
 #include "cetlib/BasicPluginFactory.h"
 #include "cetlib/compiler_macros.h"
 #include "ers/Issue.hpp"
+#include "logging/Logging.hpp" // NOTE: if ISSUES ARE DECLARED BEFORE include logging/Logging.hpp, TLOG_DEBUG<<issue wont work.
 #include <optional>
 
 
