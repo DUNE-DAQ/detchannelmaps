@@ -33,6 +33,7 @@ void dune::TPCChannelMapSP::ReadMapFromFile(std::string& fullname)
     linestream >>
       chanInfo.offlchan >>
       chanInfo.detid >>
+      chanInfo.detelement >>
       chanInfo.crate >>
       chanInfo.slot >>
       chanInfo.stream >>

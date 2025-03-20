@@ -26,6 +26,7 @@ public:
   typedef struct TPCChanInfo {
     unsigned int offlchan;      // in gdml and channel sorting convention
     unsigned int detid;         // from detdatformats/DetID.hpp.   Map key
+    unsigned int detelement;    // CRP number for Vertical Drift or APA number for Horizontal Drift
     unsigned int crate;         // crate number   Map key
     unsigned int slot;          // slot in crate (WIB for BDE and HD, card for TDE)   Map key
     unsigned int stream;        // Hermes stream for BDE and HD, 0 for TDE   Map key
