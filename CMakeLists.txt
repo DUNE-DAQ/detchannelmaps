@@ -30,6 +30,8 @@ daq_add_plugin( FiftyLChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( HDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( ICEBERGChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
+daq_add_plugin( DummyHDPDSChannelMap dunePDSChannelMap LINK_LIBRARIES detchannelmaps )
+
 ##############################################################################
 # Integration tests
 
