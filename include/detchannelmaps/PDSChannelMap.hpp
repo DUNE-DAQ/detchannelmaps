@@ -63,6 +63,7 @@ public:
   /**
    * @brief      Gets the offline channel from detector elements.
    *
+   * @param[in]  det          The det
    * @param[in]  crate        The crate
    * @param[in]  slot         The slot
    * @param[in]  fiber        The fiber
