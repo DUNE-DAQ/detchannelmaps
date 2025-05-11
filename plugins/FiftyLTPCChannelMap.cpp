@@ -6,7 +6,7 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-class FiftyLChannelMap :  public TPCChannelMap
+class FiftyLTPCChannelMap :  public TPCChannelMap
 {
 
 private:
@@ -14,7 +14,7 @@ private:
   const static uint kDetID = 10;
 public:
 
-  explicit FiftyLChannelMap() {
+  explicit FiftyLTPCChannelMap() {
   
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
@@ -24,13 +24,13 @@ public:
     std::string channel_map_file = detchannelmaps_share + "/config/50L/50LChannelMap_v1.txt";
     m_channel_map.reset(new dune::PD2HDChannelMapSP());
     m_channel_map->ReadMapFromFile(channel_map_file);
-    TLOG_DEBUG(10) << "FiftyLChannelMap Created";
+    TLOG_DEBUG(10) << "FiftyLTPCChannelMap Created";
   }
 
-  FiftyLChannelMap(const FiftyLChannelMap&) = delete;            ///< FiftyLChannelMap is not copy-constructible
-  FiftyLChannelMap& operator=(const FiftyLChannelMap&) = delete; ///< FiftyLChannelMap is not copy-assignable
-  FiftyLChannelMap(FiftyLChannelMap&&) = delete;                 ///< FiftyLChannelMap is not move-constructible
-  FiftyLChannelMap& operator=(FiftyLChannelMap&&) = delete;      ///< FiftyLChannelMap is not move-assignable
+  FiftyLTPCChannelMap(const FiftyLTPCChannelMap&) = delete;            ///< FiftyLTPCChannelMap is not copy-constructible
+  FiftyLTPCChannelMap& operator=(const FiftyLTPCChannelMap&) = delete; ///< FiftyLTPCChannelMap is not copy-assignable
+  FiftyLTPCChannelMap(FiftyLTPCChannelMap&&) = delete;                 ///< FiftyLTPCChannelMap is not move-constructible
+  FiftyLTPCChannelMap& operator=(FiftyLTPCChannelMap&&) = delete;      ///< FiftyLTPCChannelMap is not move-assignable
 
 
   /**
@@ -146,7 +146,7 @@ private:
   
 };
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::FiftyLChannelMap)
+DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::FiftyLTPCChannelMap)
 
 
 } // namespace detchannelmaps
