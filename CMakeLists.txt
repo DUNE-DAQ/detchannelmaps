@@ -18,24 +18,24 @@ daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging
 
 ##############################################################################
 # Python bindings
-daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
+# daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 
 ##############################################################################
 # Plugins
-daq_add_plugin( ProtoDUNESP1ChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( VDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( PD2HDChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( PD2VDBottomTPCChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( ProtoDUNESP1ChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( VDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( PD2HDChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( PD2VDBottomTPCChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( FiftyLChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( HDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( ICEBERGChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( HDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( ICEBERGChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Integration tests
 
 # ##############################################################################
 # Test plugins
-daq_add_plugin( DummyChannelMap duneChannelMap TEST LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( DummyChannelMap duneChannelMap TEST LINK_LIBRARIES detchannelmaps )
 
 daq_add_application( dummy_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps )
 

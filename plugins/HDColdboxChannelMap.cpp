@@ -6,9 +6,15 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-class HDColdboxChannelMap :  public TPCChannelMap
-{
+class HDColdboxChannelMap :  public TPCChannelMap {
+private:
+  // TODO: Use detdataformats::kHD_TPC instead
+  const static uint kDetID = 3;
 public:
+  /**
+   * @brief Construct a new HDColdboxChannelMap object
+   * 
+   */
   explicit HDColdboxChannelMap() {
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
@@ -26,8 +32,33 @@ public:
   HDColdboxChannelMap(HDColdboxChannelMap&&) = delete;                 ///< HDColdboxChannelMap is not move-constructible
   HDColdboxChannelMap& operator=(HDColdboxChannelMap&&) = delete;      ///< HDColdboxChannelMap is not move-assignable
 
-  uint
-  get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint link, uint wibframechan) final {
+  /**
+   * @brief Get the offline channel from detector crate slot stream chan object
+   * 
+   * @param det 
+   * @param crate 
+   * @param slot 
+   * @param stream 
+   * @param channel 
+   * 
+   * @return offline channel identifier
+   */
+  uint 
+  get_offline_channel_from_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) final {
+
+    // Must be a BDE channel 
+    if( det != kDetID) 
+      throw InvalidDetectorID(ERS_HERE, det);
+
+    // if stream number looks wrong (not 0,1,2,3 or 64,65,66,67)
+    if( (stream & 0xbc) ) 
+      throw InvalidStreamID(ERS_HERE, stream);
+    
+    constexpr uint n_chan_per_stream = 64;
+
+    uint link = (stream >> 6) & 1;
+    uint stream_in_link = (stream & 0x3);
+    uint wibframechan = n_chan_per_stream*stream_in_link+channel;
 
     auto chan_info = m_channel_map->GetChanInfoFromWIBElements(
         crate, slot, link, wibframechan
@@ -37,8 +68,7 @@ public:
       return -1;
     }
 
-    return chan_info.offlchan;
-
+    return chan_info.offlchan;    
   }
 
 

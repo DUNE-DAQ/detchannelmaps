@@ -25,32 +25,32 @@ main()
 
   uint oc, plane;
 
-  oc = dummy_map->get_offline_channel_from_crate_slot_fiber_chan(1, 2, 3, 4);
-  plane = dummy_map->get_plane_from_offline_channel(oc);
+  oc = dummy_map->get_offline_channel_from_det_crate_slot_stream_chan(0, 1, 2, 3, 4);
+  plane = dummy_map->get_tpc_plane_from_offline_channel(oc);
   TLOG() << "Dummy Offline channel " << oc << " plane " << plane;
 
   std::shared_ptr<TPCChannelMap> pdps1_map = make_map("ProtoDUNESP1ChannelMap");
 
-  oc = pdps1_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
-  plane = pdps1_map->get_plane_from_offline_channel(oc);
+  oc = pdps1_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
+  plane = pdps1_map->get_tpc_plane_from_offline_channel(oc);
   TLOG() << "ProtoDUNESP1 Offline channel " << oc << " plane " << plane;
 
   std::shared_ptr<TPCChannelMap> vdcb_map = make_map("VDColdboxChannelMap");
 
-  oc = vdcb_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
-  plane = vdcb_map->get_plane_from_offline_channel(oc);
+  oc = vdcb_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
+  plane = vdcb_map->get_tpc_plane_from_offline_channel(oc);
   TLOG() << "VDColdbox Offline channel " << oc << " plane " << plane;
 
   std::shared_ptr<TPCChannelMap> pd2hd_map = make_map("PD2HDChannelMap");
 
-  oc = pd2hd_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
-  plane = pd2hd_map->get_plane_from_offline_channel(oc);
+  oc = pd2hd_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
+  plane = pd2hd_map->get_tpc_plane_from_offline_channel(oc);
   TLOG() << "PD2HD Offline channel " << oc << " plane " << plane;
 
   std::shared_ptr<TPCChannelMap> hdcb_map = make_map("HDColdboxChannelMap");
 
-  oc = hdcb_map->get_offline_channel_from_crate_slot_fiber_chan(1, 1, 1, 127);
-  plane = hdcb_map->get_plane_from_offline_channel(oc);
+  oc = hdcb_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
+  plane = hdcb_map->get_tpc_plane_from_offline_channel(oc);
   TLOG() << "HDColdbox Offline channel " << oc << " plane " << plane;
 
   TLOG() << "Test complete";
