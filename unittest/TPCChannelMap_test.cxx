@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_SUITE(BOOST_TEST_MODULE)
 
 BOOST_AUTO_TEST_CASE(Basics)
 {
-  auto ptr = detchannelmaps::make_map("HDColdboxChannelMap");
+  auto ptr = detchannelmaps::make_tpc_map("HDColdboxChannelMap");
   BOOST_REQUIRE(ptr != nullptr);
 }
 

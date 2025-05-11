@@ -59,9 +59,9 @@ class TPCChannelMap
 {
 public:
 
-  struct TPCInfo
+  struct TPCChannelInfo
   {
-    uint16_t det;
+    uint16_t detector;
     uint16_t crate;
     uint16_t slot;
     uint16_t fiber;
@@ -85,7 +85,7 @@ public:
   virtual uint get_tpc_plane_from_offline_channel(uint offchannel) = 0;
   virtual uint get_tpc_element_id_from_offline_channel(uint ) { return 0; }
   virtual std::string get_tpc_element_name_from_offline_channel(uint ) { return ""; }
-  virtual std::optional<TPCInfo> get_tpc_info_from_offline_channel(uint offchannel) = 0;
+  virtual std::optional<TPCChannelInfo> get_tpc_channel_info_from_offline_channel(uint offchannel) = 0;
   /**
    * @brief TPCChannelMap destructor
    */
@@ -108,7 +108,7 @@ protected:
  * @return shared_ptr to created TPCChannelMap instance
  */
 inline std::shared_ptr<TPCChannelMap>
-make_map(std::string const& plugin_name)
+make_tpc_map(std::string const& plugin_name)
 {
   static cet::BasicPluginFactory bpf("duneChannelMap", "make");
 

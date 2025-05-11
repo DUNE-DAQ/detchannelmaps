@@ -127,14 +127,14 @@ public:
   }
 
 
-  std::optional<TPCInfo> 
-  get_tpc_info_from_offline_channel(uint offchannel) {
+  std::optional<TPCChannelInfo> 
+  get_tpc_channel_info_from_offline_channel(uint offchannel) {
     auto ci = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if ( !ci.valid) {
       return std::nullopt;
     }
-    return TPCInfo{kDetID, ci.crate, ci.wib-1, ci.link, ci.wibframechan, 0};
+    return TPCChannelInfo{kDetID, ci.crate, ci.wib-1, ci.link, ci.wibframechan, 0};
   }
 
 
