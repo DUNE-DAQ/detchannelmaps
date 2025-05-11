@@ -1,0 +1,77 @@
+/**
+ * @file DummyModule.hpp
+ *
+ * DummyModule is a simple ChannelMap implementation that responds to a "stuff" command with a log message.
+ *
+ * This is part of the DUNE DAQ Application Framework, copyright 2020.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
+
+#ifndef DETCHANNELMAPS_TEST_PLUGINS_DummyTPCChannelMap_HPP_
+#define DETCHANNELMAPS_TEST_PLUGINS_DummyTPCChannelMap_HPP_
+
+#include "detchannelmaps/TPCChannelMap.hpp"
+
+#include "ers/Issue.hpp"
+#include "logging/Logging.hpp" // NOTE: if ISSUES ARE DECLARED BEFORE include logging/Logging.hpp, TLOG_DEBUG<<issue wont work.
+
+#include <string>
+#include <vector>
+
+namespace dunedaq {
+
+// Disable coverage collection LCOV_EXCL_START
+// ERS_DECLARE_ISSUE_BASE(detchannelmaps,
+//                        DummyModuleUpdate,
+//                        detchannelmaps::GeneralChannelMapIssue,
+//                        message,
+//                        ((std::string)name),
+//                        ((std::string)message))
+// Re-enable coverage collection LCOV_EXCL_STOP
+
+namespace detchannelmaps {
+
+class DummyTPCChannelMap : public TPCChannelMap
+{
+public:
+  explicit DummyTPCChannelMap() {}
+  DummyTPCChannelMap(const DummyTPCChannelMap&) = delete;            ///< DummyTPCChannelMap is not copy-constructible
+  DummyTPCChannelMap& operator=(const DummyTPCChannelMap&) = delete; ///< DummyTPCChannelMap is not copy-assignable
+  DummyTPCChannelMap(DummyTPCChannelMap&&) = delete;                 ///< DummyTPCChannelMap is not move-constructible
+  DummyTPCChannelMap& operator=(DummyTPCChannelMap&&) = delete;      ///< DummyTPCChannelMap is not move-assignable
+
+  uint
+  get_offline_channel_from_det_crate_slot_stream_chan(uint /*det*/, uint /*crate*/, uint /*slot*/, uint /*fiber*/, uint /*fembchannel*/) final {
+    return 5678;
+  }
+
+  uint
+  get_tpc_plane_from_offline_channel(uint /*offchannel*/) final {
+    return 2;
+  }
+
+  uint
+  get_tpc_element_id_from_offline_channel(uint /*offchannel*/) final {
+    return 0;
+  }
+
+  std::string
+  get_tpc_element_name_from_offline_channel(uint /*offchannel*/) final {
+    return "Dummy0";
+  }
+
+  std::optional<TPCChannelInfo> 
+  get_tpc_channel_info_from_offline_channel(uint offchannel) {
+    return TPCChannelInfo{1, 2, 3, 4, 5, 6};
+  }
+
+};
+
+} // namespace detchannelmaps
+} // namespace dunedaq
+
+#endif // DETCHANNELMAPS_TEST_PLUGINS_DummyTPCChannelMap_HPP_
+
+
+DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::DummyTPCChannelMap)

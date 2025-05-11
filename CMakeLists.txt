@@ -35,9 +35,9 @@ daq_add_plugin( FiftyLChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
 
 # ##############################################################################
 # Test plugins
-# daq_add_plugin( DummyChannelMap duneChannelMap TEST LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( DummyTPCChannelMap duneChannelMap TEST LINK_LIBRARIES detchannelmaps )
 
-daq_add_application( dummy_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps )
+daq_add_application( detchannelmaps_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Unit Tests
