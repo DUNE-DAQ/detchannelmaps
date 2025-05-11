@@ -110,7 +110,7 @@ protected:
 inline std::shared_ptr<TPCChannelMap>
 make_tpc_map(std::string const& plugin_name)
 {
-  static cet::BasicPluginFactory bpf("duneChannelMap", "make");
+  static cet::BasicPluginFactory bpf("duneTPCChannelMap", "make");
 
   std::shared_ptr<TPCChannelMap> mod_ptr;
   try {
