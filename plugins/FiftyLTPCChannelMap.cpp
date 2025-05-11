@@ -48,12 +48,14 @@ public:
   get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) final {
 
     // Must be a BDE channel 
-    if( det != kDetID) 
+    if( det != kDetID) {
       throw InvalidDetectorID(ERS_HERE, det);
+    }
 
     // if stream number looks wrong (not 0,1,2,3 or 64,65,66,67)
-    if( (stream & 0xbc) ) 
+    if( (stream & 0xbc) ) {
       throw InvalidStreamID(ERS_HERE, stream);
+    }
     
     constexpr uint n_chan_per_stream = 64;
 

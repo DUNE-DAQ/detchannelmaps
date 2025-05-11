@@ -5,6 +5,7 @@ find_package(daq-cmake REQUIRED)
 find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
 find_package(ers REQUIRED)
 find_package(logging REQUIRED)
+find_package(fmt REQUIRED)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 daq_setup_environment()
@@ -23,12 +24,17 @@ daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 ##############################################################################
 # Plugins
 # daq_add_plugin( ProtoDUNESP1ChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-# daq_add_plugin( VDColdboxChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-# daq_add_plugin( PD2HDChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-# daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+
 daq_add_plugin( FiftyLTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-# daq_add_plugin( HDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 # daq_add_plugin( ICEBERGChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+
+daq_add_plugin( HDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+# daq_add_plugin( PD2HDChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+
+# daq_add_plugin( VDColdboxChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps fmt::fmt )
+
 
 ##############################################################################
 # Integration tests
@@ -37,7 +43,7 @@ daq_add_plugin( FiftyLTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelm
 # Test plugins
 daq_add_plugin( DummyTPCChannelMap duneTPCChannelMap TEST LINK_LIBRARIES detchannelmaps )
 
-daq_add_application( detchannelmaps_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps )
+daq_add_application( detchannelmaps_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps fmt::fmt )
 
 ##############################################################################
 # Unit Tests

@@ -6,16 +6,16 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-class HDColdboxChannelMap :  public TPCChannelMap {
+class HDColdboxTPCChannelMap :  public TPCChannelMap {
 private:
   // TODO: Use detdataformats::kHD_TPC instead
   const static uint kDetID = 3;
 public:
   /**
-   * @brief Construct a new HDColdboxChannelMap object
+   * @brief Construct a new HDColdboxTPCChannelMap object
    * 
    */
-  explicit HDColdboxChannelMap() {
+  explicit HDColdboxTPCChannelMap() {
     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
     if (!detchannelmaps_share_cstr) {
       throw std::runtime_error("Environment variable DETCHANNELMAPS_SHARE is not set");
@@ -24,13 +24,13 @@ public:
     std::string channel_map_file = detchannelmaps_share + "/config/pd2hd/PD2HDChannelMap_v2.txt";
     m_channel_map.reset(new dune::PD2HDChannelMapSP());
     m_channel_map->ReadMapFromFile(channel_map_file);
-    TLOG_DEBUG(10) << "HDColdboxChannelMap Created";
+    TLOG_DEBUG(10) << "HDColdboxTPCChannelMap Created";
   }
 
-  HDColdboxChannelMap(const HDColdboxChannelMap&) = delete;            ///< HDColdboxChannelMap is not copy-constructible
-  HDColdboxChannelMap& operator=(const HDColdboxChannelMap&) = delete; ///< HDColdboxChannelMap is not copy-assignable
-  HDColdboxChannelMap(HDColdboxChannelMap&&) = delete;                 ///< HDColdboxChannelMap is not move-constructible
-  HDColdboxChannelMap& operator=(HDColdboxChannelMap&&) = delete;      ///< HDColdboxChannelMap is not move-assignable
+  HDColdboxTPCChannelMap(const HDColdboxTPCChannelMap&) = delete;            ///< HDColdboxTPCChannelMap is not copy-constructible
+  HDColdboxTPCChannelMap& operator=(const HDColdboxTPCChannelMap&) = delete; ///< HDColdboxTPCChannelMap is not copy-assignable
+  HDColdboxTPCChannelMap(HDColdboxTPCChannelMap&&) = delete;                 ///< HDColdboxTPCChannelMap is not move-constructible
+  HDColdboxTPCChannelMap& operator=(HDColdboxTPCChannelMap&&) = delete;      ///< HDColdboxTPCChannelMap is not move-assignable
 
   /**
    * @brief Get the offline channel from detector crate slot stream chan object
@@ -44,15 +44,15 @@ public:
    * @return offline channel identifier
    */
   uint 
-  get_offline_channel_from_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) final {
+  get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) final {
 
     // Must be a BDE channel 
     if( det != kDetID) 
-      throw InvalidDetectorID(ERS_HERE, det);
+      return -1;
 
     // if stream number looks wrong (not 0,1,2,3 or 64,65,66,67)
     if( (stream & 0xbc) ) 
-      throw InvalidStreamID(ERS_HERE, stream);
+      return -1;
     
     constexpr uint n_chan_per_stream = 64;
 
@@ -72,27 +72,77 @@ public:
   }
 
 
-  uint
-  get_plane_from_offline_channel(uint offchannel) final {
+  /**
+   * @brief Get the plane from offline channel object
+   * 
+   * @param offchannel 
+   * @return plane id (0, 1 or 2) 
+   */
+  uint 
+  get_tpc_plane_from_offline_channel(uint offchannel) final {
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
-      return 9999;
+      return -1;
     }
 
     return chan_info.plane;
   };
 
 
-  std::optional<TPCCoords> 
-  get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) {
+  /**
+   * @brief Get the element id from offline channel object
+   * 
+   * @param offchannel 
+   * @return uint 
+   */
+  uint
+  get_tpc_element_id_from_offline_channel( uint offchannel) {
+    auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
+
+    if (!chan_info.valid) {
+      return -1;
+    }
+
+
+    // Brute force approack
+    if(chan_info.APAName=="APA_P02SU") return 1;
+    if(chan_info.APAName=="APA_P01SU") return 2;
+    if(chan_info.APAName=="APA_P02NL") return 3;
+    if(chan_info.APAName=="APA_P01NL") return 4;
+
+    // There is only one element
+    return 0;
+  }
+
+  /**
+   * @brief Get the tpc element name from offline channel object
+   * 
+   * @param offchannel 
+   * @return std::string 
+   */
+  std::string 
+  get_tpc_element_name_from_offline_channel( uint offchannel) {
+    auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
+
+    if (!chan_info.valid) {
+      return "";
+    }
+
+    return chan_info.APAName;
+  }
+
+
+  std::optional<TPCChannelInfo> 
+  get_tpc_channel_info_from_offline_channel(uint offchannel) {
     auto ci = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if ( !ci.valid) {
       return std::nullopt;
     }
-    return TPCCoords{ci.crate, ci.wib-1, ci.link, ci.wibframechan};
+    return TPCChannelInfo{kDetID, ci.crate, ci.wib-1, ci.link, ci.wibframechan, 0};
   }
+
 
 private:
 
@@ -101,7 +151,7 @@ private:
   
 };
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::HDColdboxChannelMap)
+DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::HDColdboxTPCChannelMap)
 
 
 } // namespace detchannelmaps
