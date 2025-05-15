@@ -82,7 +82,7 @@ public:
 //   std::unique_ptr<dune::PD2HDChannelMapSP> m_channel_map;
 
   
-// };
+};
 
 DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::VDColdboxChannelMap)
 

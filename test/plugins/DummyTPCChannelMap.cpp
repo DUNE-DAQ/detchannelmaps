@@ -47,22 +47,22 @@ public:
   }
 
   uint
-  get_tpc_plane_from_offline_channel(uint /*offchannel*/) final {
+  get_plane_from_offline_channel(uint /*offchannel*/) final {
     return 2;
   }
 
   uint
-  get_tpc_element_id_from_offline_channel(uint /*offchannel*/) final {
+  get_element_id_from_offline_channel(uint /*offchannel*/) final {
     return 0;
   }
 
   std::string
-  get_tpc_element_name_from_offline_channel(uint /*offchannel*/) final {
+  get_element_name_from_offline_channel(uint /*offchannel*/) final {
     return "Dummy0";
   }
 
   std::optional<TPCChannelInfo> 
-  get_tpc_channel_info_from_offline_channel(uint offchannel) {
+  get_channel_info_from_offline_channel(uint offchannel) {
     return TPCChannelInfo{1, 2, 3, 4, 5, 6};
   }
 

@@ -23,15 +23,13 @@ daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 
 ##############################################################################
 # Plugins
-# daq_add_plugin( ProtoDUNESP1ChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-
 daq_add_plugin( FiftyLTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-# daq_add_plugin( ICEBERGChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( ICEBERGChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
 daq_add_plugin( HDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-# daq_add_plugin( PD2HDChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2HDChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
-# daq_add_plugin( VDColdboxChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( VDColdboxChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps fmt::fmt )
 

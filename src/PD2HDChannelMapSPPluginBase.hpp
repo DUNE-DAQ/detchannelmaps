@@ -88,7 +88,7 @@ public:
    * @return plane id (0, 1 or 2) 
    */
   uint 
-  get_tpc_plane_from_offline_channel(uint offchannel) final {
+  get_plane_from_offline_channel(uint offchannel) final {
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
@@ -106,7 +106,7 @@ public:
    * @return uint 
    */
   uint
-  get_tpc_element_id_from_offline_channel( uint offchannel) final {
+  get_element_id_from_offline_channel( uint offchannel) final {
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
@@ -126,7 +126,7 @@ public:
    * @return std::string 
    */
   std::string 
-  get_tpc_element_name_from_offline_channel( uint offchannel) final {
+  get_element_name_from_offline_channel( uint offchannel) final {
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
@@ -138,7 +138,7 @@ public:
 
 
   std::optional<TPCChannelMap::TPCChannelInfo> 
-  get_tpc_channel_info_from_offline_channel(uint offchannel) final {
+  get_channel_info_from_offline_channel(uint offchannel) final {
     auto ci = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if ( !ci.valid) {
