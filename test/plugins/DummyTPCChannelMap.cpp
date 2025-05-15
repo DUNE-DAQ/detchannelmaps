@@ -42,7 +42,7 @@ public:
   DummyTPCChannelMap& operator=(DummyTPCChannelMap&&) = delete;      ///< DummyTPCChannelMap is not move-assignable
 
   uint
-  get_offline_channel_from_det_crate_slot_stream_chan(uint /*det*/, uint /*crate*/, uint /*slot*/, uint /*fiber*/, uint /*fembchannel*/) final {
+  get_offline_channel_from_det_crate_slot_stream_chan(uint /*det*/, uint /*crate*/, uint /*slot*/, uint /*stream*/, uint /*fembchannel*/) final {
     return 5678;
   }
 

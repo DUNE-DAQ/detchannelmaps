@@ -28,9 +28,9 @@ register_maps(py::module& m)
     .def_readwrite("detector", &TPCChannelMap::TPCChannelInfo::detector)
     .def_readwrite("crate", &TPCChannelMap::TPCChannelInfo::crate)
     .def_readwrite("slot", &TPCChannelMap::TPCChannelInfo::slot)
-    .def_readwrite("fiber", &TPCChannelMap::TPCChannelInfo::fiber)
+    .def_readwrite("stream", &TPCChannelMap::TPCChannelInfo::stream)
     .def_readwrite("channel", &TPCChannelMap::TPCChannelInfo::channel)
-    .def_readwrite("tpc_element", &TPCChannelMap::TPCChannelInfo::tpc_element)
+    .def_readwrite("element", &TPCChannelMap::TPCChannelInfo::element)
   ;
 
   py::class_<TPCChannelMap, std::shared_ptr<TPCChannelMap>>(m, "TPCChannelMap")

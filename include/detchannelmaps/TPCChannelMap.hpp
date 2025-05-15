@@ -61,12 +61,14 @@ public:
 
   struct TPCChannelInfo
   {
-    uint16_t detector;
-    uint16_t crate;
-    uint16_t slot;
-    uint16_t fiber;
-    uint16_t channel;
-    uint16_t tpc_element;
+    static constexpr uint16_t kUndefined=0xffff;
+
+    uint16_t detector = kUndefined;
+    uint16_t crate = kUndefined;
+    uint16_t slot = kUndefined;
+    uint16_t stream = kUndefined;
+    uint16_t channel = kUndefined;
+    uint16_t element = kUndefined;
   };
 
   /**
