@@ -39,17 +39,17 @@ main()
   // plane = pdps1_map->get_plane_from_offline_channel(oc);
   // TLOG() << "ProtoDUNESP1 Offline channel " << oc << " plane " << plane;
 
-  // std::shared_ptr<TPCChannelMap> vdcb_map = make_tpc_map("VDColdboxChannelMap");
+  std::shared_ptr<TPCChannelMap> vdcb_map = make_tpc_map("VDColdboxChannelMap");
 
-  // oc = vdcb_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
-  // plane = vdcb_map->get_plane_from_offline_channel(oc);
-  // TLOG() << "VDColdbox Offline channel " << oc << " plane " << plane;
+  oc = vdcb_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
+  plane = vdcb_map->get_plane_from_offline_channel(oc);
+  TLOG() << "VDColdbox Offline channel " << oc << " plane " << plane;
 
-  // std::shared_ptr<TPCChannelMap> pd2hd_map = make_tpc_map("PD2HDChannelMap");
+  std::shared_ptr<TPCChannelMap> pd2hd_map = make_tpc_map("PD2HDTPCChannelMap");
 
-  // oc = pd2hd_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
-  // plane = pd2hd_map->get_plane_from_offline_channel(oc);
-  // TLOG() << "PD2HD Offline channel " << oc << " plane " << plane;
+  oc = pd2hd_map->get_offline_channel_from_det_crate_slot_stream_chan(10, 1, 1, 1, 127);
+  plane = pd2hd_map->get_plane_from_offline_channel(oc);
+  TLOG() << "PD2HD Offline channel " << oc << " plane " << plane;
 
   std::shared_ptr<TPCChannelMap> hdcb_map = make_tpc_map("HDColdboxTPCChannelMap");
 
