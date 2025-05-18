@@ -51,7 +51,7 @@ private:
   
 };
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::VDColdboxChannelMap)
+DEFINE_DUNE_DET_TPCCHANNEL_MAP(dunedaq::detchannelmaps::VDColdboxChannelMap)
 
 
 } // namespace detchannelmaps

@@ -74,4 +74,4 @@ public:
 #endif // DETCHANNELMAPS_TEST_PLUGINS_DummyTPCChannelMap_HPP_
 
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::DummyTPCChannelMap)
+DEFINE_DUNE_DET_TPCCHANNEL_MAP(dunedaq::detchannelmaps::DummyTPCChannelMap)

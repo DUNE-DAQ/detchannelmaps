@@ -45,7 +45,7 @@ public:
   get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) final {
   
     auto ch_info = m_channel_map->GetChanInfoFromElectronicsIDs(det, crate, slot, stream, channel );
-    return ( ch_info.valid ? ch_info.offlchan : 9999 );
+    return ( ch_info.valid ? ch_info.offlchan : -1 );
   }
 
 
@@ -60,7 +60,7 @@ public:
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
-      return 9999;
+      return -1;
     }
 
     return chan_info.plane;
@@ -78,7 +78,7 @@ public:
     auto chan_info = m_channel_map->GetChanInfoFromOfflChan(offchannel);
 
     if (!chan_info.valid) {
-      return 9999;
+      return -1;
     }
 
     return chan_info.detelement;
@@ -120,7 +120,7 @@ private:
   
 };
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::PD2VDTPCChannelMap)
+DEFINE_DUNE_DET_TPCCHANNEL_MAP(dunedaq::detchannelmaps::PD2VDTPCChannelMap)
 
 
 } // namespace detchannelmaps

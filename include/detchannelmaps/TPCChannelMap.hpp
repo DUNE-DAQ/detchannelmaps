@@ -19,7 +19,7 @@
  * @param klass Class to be defined as a DUNE DAQ Module
  */
 // NOLINTNEXTLINE(build/define_used)
-#define DEFINE_DUNE_DET_CHANNEL_MAP(klass)                                                                                  \
+#define DEFINE_DUNE_DET_TPCCHANNEL_MAP(klass)                                                                                  \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
   std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap> make()                                                                  \
   {                                                                                                                    \

@@ -144,7 +144,12 @@ public:
     if ( !ci.valid) {
       return std::nullopt;
     }
-    return TPCChannelMap::TPCChannelInfo{m_det_id, ci.crate, ci.wib-1, ci.link, ci.wibframechan, m_elem_name_id_converter(ci.APAName)};
+    constexpr uint n_chan_per_stream = 64;
+    uint16_t slot_id = ci.wib-1;
+    uint16_t stream_id = ci.link*n_chan_per_stream+ci.wibframechan/n_chan_per_stream;
+    uint16_t chan_id = ci.wibframechan%n_chan_per_stream;
+
+    return TPCChannelMap::TPCChannelInfo{m_det_id, ci.crate, slot_id, stream_id, chan_id, m_elem_name_id_converter(ci.APAName)};
   }
 
 };

@@ -27,7 +27,7 @@ daq_add_plugin( FiftyLTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelm
 daq_add_plugin( ICEBERGChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
 daq_add_plugin( HDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( PD2HDChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2HDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
 daq_add_plugin( VDColdboxChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
@@ -41,7 +41,7 @@ daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelma
 # Test plugins
 daq_add_plugin( DummyTPCChannelMap duneTPCChannelMap TEST LINK_LIBRARIES detchannelmaps )
 
-daq_add_application( detchannelmaps_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps fmt::fmt )
+daq_add_application( detchannelmaps_tpcmap_test tpcmap_test.cxx TEST LINK_LIBRARIES detchannelmaps fmt::fmt )
 
 ##############################################################################
 # Unit Tests

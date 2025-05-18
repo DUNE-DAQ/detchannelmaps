@@ -7,7 +7,7 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-class PD2HDChannelMap :  public PD2HDChannelMapSPPluginBase
+class PD2HDTPCChannelMap :  public PD2HDChannelMapSPPluginBase
 {
 public:
   // TODO: Use detdataformats::kHD_TPC instead
@@ -17,7 +17,7 @@ public:
    * @brief Construct a new HDColdboxTPCChannelMap object
    * 
    */
-  explicit PD2HDChannelMap() :
+  explicit PD2HDTPCChannelMap() :
     PD2HDChannelMapSPPluginBase( kDetID, "pd2hd/PD2HDChannelMap_v6.txt" ) {
 
     m_elem_name_id_converter = [](const std::string& apa_name) -> uint {
@@ -35,9 +35,9 @@ public:
       }
     };
 
-    TLOG_DEBUG(10) << "PD2HDChannelMap Created";
+    TLOG_DEBUG(10) << "PD2HDTPCChannelMap Created";
   }
-//   explicit PD2HDChannelMap() {
+//   explicit PD2HDTPCChannelMap() {
   
 //     const char* detchannelmaps_share_cstr = getenv("DETCHANNELMAPS_SHARE");
 //     if (!detchannelmaps_share_cstr) {
@@ -47,13 +47,13 @@ public:
 //     std::string channel_map_file = detchannelmaps_share + "/config/pd2hd/PD2HDChannelMap_v6.txt";
 //     m_channel_map.reset(new dune::PD2HDChannelMapSP());
 //     m_channel_map->ReadMapFromFile(channel_map_file);
-//     TLOG_DEBUG(10) << "PD2HDChannelMap Created";
+//     TLOG_DEBUG(10) << "PD2HDTPCChannelMap Created";
 //   }
 
-//   PD2HDChannelMap(const PD2HDChannelMap&) = delete;            ///< PD2HDChannelMap is not copy-constructible
-//   PD2HDChannelMap& operator=(const PD2HDChannelMap&) = delete; ///< PD2HDChannelMap is not copy-assignable
-//   PD2HDChannelMap(PD2HDChannelMap&&) = delete;                 ///< PD2HDChannelMap is not move-constructible
-//   PD2HDChannelMap& operator=(PD2HDChannelMap&&) = delete;      ///< PD2HDChannelMap is not move-assignable
+//   PD2HDTPCChannelMap(const PD2HDTPCChannelMap&) = delete;            ///< PD2HDTPCChannelMap is not copy-constructible
+//   PD2HDTPCChannelMap& operator=(const PD2HDTPCChannelMap&) = delete; ///< PD2HDTPCChannelMap is not copy-assignable
+//   PD2HDTPCChannelMap(PD2HDTPCChannelMap&&) = delete;                 ///< PD2HDTPCChannelMap is not move-constructible
+//   PD2HDTPCChannelMap& operator=(PD2HDTPCChannelMap&&) = delete;      ///< PD2HDTPCChannelMap is not move-assignable
 
 
 //   uint 
@@ -113,7 +113,7 @@ public:
   
 };
 
-DEFINE_DUNE_DET_CHANNEL_MAP(dunedaq::detchannelmaps::PD2HDChannelMap)
+DEFINE_DUNE_DET_TPCCHANNEL_MAP(dunedaq::detchannelmaps::PD2HDTPCChannelMap)
 
 
 } // namespace detchannelmaps
