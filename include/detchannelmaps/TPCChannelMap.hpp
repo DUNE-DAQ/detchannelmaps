@@ -85,7 +85,7 @@ public:
   virtual uint get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) = 0;
 
   virtual uint get_plane_from_offline_channel(uint offchannel) = 0;
-  virtual uint get_element_id_from_offline_channel(uint ) { return 0; }
+  virtual uint get_element_id_from_offline_channel(uint ) { return TPCChannelInfo::kUndefined; }
   virtual std::string get_element_name_from_offline_channel(uint ) { return ""; }
   virtual std::optional<TPCChannelInfo> get_channel_info_from_offline_channel(uint offchannel) = 0;
   /**
