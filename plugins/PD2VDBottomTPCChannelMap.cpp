@@ -22,9 +22,9 @@ public:
 
     m_elem_name_id_converter = [](const std::string& apa_name) -> uint {
       // Brute force approack
-      if(apa_name=="4") {
+      if(apa_name=="BottomCRP4") {
         return 4;
-      } else if(apa_name=="5") {
+      } else if(apa_name=="BottomCRP5") {
         return 5;
       } else {
         return -1;

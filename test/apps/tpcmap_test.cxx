@@ -59,8 +59,9 @@ main()
 
   test_tpc_map("HDColdboxTPCChannelMap", 3, 1, 1, 1, 45);
 
-  test_tpc_map("PD2VDTPCChannelMap", 10, 10, 0, 0, 52);
+  test_tpc_map("PD2VDBottomTPCChannelMap", 10, 10, 0, 0, 52);
 
+  test_tpc_map("PD2VDTPCChannelMap", 10, 10, 0, 0, 52);
   test_tpc_map("PD2VDTPCChannelMap", 11, 8, 0, 0, 52);
 
   TLOG() << "Test complete";
