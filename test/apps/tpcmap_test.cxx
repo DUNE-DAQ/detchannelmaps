@@ -53,9 +53,7 @@ main()
  
   test_tpc_map("DummyTPCChannelMap", 1, 2, 3, 4, 5);
 
-  test_tpc_map("VDColdboxChannelMap", 10, 6, 1, 1, 63);
-
-  test_tpc_map("VDColdboxChannelMap", 10, 6, 1, 1, 63);
+  test_tpc_map("VDColdboxTPCChannelMap", 10, 6, 1, 1, 63);
 
   test_tpc_map("HDColdboxTPCChannelMap", 3, 1, 1, 1, 45);
 

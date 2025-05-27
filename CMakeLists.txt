@@ -29,7 +29,7 @@ daq_add_plugin( ICEBERGChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmap
 daq_add_plugin( HDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2HDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
-daq_add_plugin( VDColdboxChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( VDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
