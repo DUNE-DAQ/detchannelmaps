@@ -15,7 +15,7 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging) 
+daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging fmt::fmt) 
 
 ##############################################################################
 # Python bindings
@@ -31,7 +31,7 @@ daq_add_plugin( PD2HDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelma
 
 daq_add_plugin( VDColdboxChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps fmt::fmt )
+daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
 
 ##############################################################################
