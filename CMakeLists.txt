@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(detchannelmaps VERSION 1.8.0)
+project(detchannelmaps VERSION 1.8.1)
 
 find_package(daq-cmake REQUIRED)
 find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
