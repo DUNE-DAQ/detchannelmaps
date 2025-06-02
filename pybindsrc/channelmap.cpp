@@ -23,23 +23,25 @@ void
 register_maps(py::module& m)
 {
 
-  py::class_<TPCChannelMap::TPCCoords>(m, "TPCCoords")
+  py::class_<TPCChannelMap::TPCChannelInfo>(m, "TPCChannelInfo")
     .def(py::init<uint, uint, uint, uint>())
-    .def_readwrite("crate", &TPCChannelMap::TPCCoords::crate)
-    .def_readwrite("slot", &TPCChannelMap::TPCCoords::slot)
-    .def_readwrite("fiber", &TPCChannelMap::TPCCoords::fiber)
-    .def_readwrite("channel", &TPCChannelMap::TPCCoords::channel)
+    .def_readwrite("detector", &TPCChannelMap::TPCChannelInfo::detector)
+    .def_readwrite("crate", &TPCChannelMap::TPCChannelInfo::crate)
+    .def_readwrite("slot", &TPCChannelMap::TPCChannelInfo::slot)
+    .def_readwrite("stream", &TPCChannelMap::TPCChannelInfo::stream)
+    .def_readwrite("channel", &TPCChannelMap::TPCChannelInfo::channel)
+    .def_readwrite("element", &TPCChannelMap::TPCChannelInfo::element)
   ;
 
   py::class_<TPCChannelMap, std::shared_ptr<TPCChannelMap>>(m, "TPCChannelMap")
+    .def("get_offline_channel_from_det_crate_slot_stream_chan", &TPCChannelMap::get_offline_channel_from_det_crate_slot_stream_chan)
     .def("get_plane_from_offline_channel", &TPCChannelMap::get_plane_from_offline_channel)
-    .def("get_tpc_element_from_offline_channel", &TPCChannelMap::get_tpc_element_from_offline_channel)
-    .def("get_offline_channel_from_crate_slot_fiber_chan", &TPCChannelMap::get_offline_channel_from_crate_slot_fiber_chan)
-    .def("get_offline_channel_from_crate_slot_stream_chan", &TPCChannelMap::get_offline_channel_from_crate_slot_stream_chan)
-    .def("get_crate_slot_fiber_chan_from_offline_channel", &TPCChannelMap::get_crate_slot_fiber_chan_from_offline_channel)
+    .def("get_element_id_from_offline_channel", &TPCChannelMap::get_element_id_from_offline_channel)
+    .def("get_element_name_from_offline_channel", &TPCChannelMap::get_element_name_from_offline_channel)
+    .def("get_channel_info_from_offline_channel", &TPCChannelMap::get_channel_info_from_offline_channel)
   ;
 
-  m.def("make_map", &make_map);
+  m.def("make_tpc_map", &make_tpc_map);
 
 }
 
