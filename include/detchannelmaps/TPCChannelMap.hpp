@@ -19,7 +19,7 @@
  * @param klass Class to be defined as a DUNE DAQ Module
  */
 // NOLINTNEXTLINE(build/define_used)
-#define DEFINE_DUNE_DET_CHANNEL_MAP(klass)                                                                                  \
+#define DEFINE_DUNE_DET_TPCCHANNEL_MAP(klass)                                                                                  \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
   std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap> make()                                                                  \
   {                                                                                                                    \
@@ -39,11 +39,19 @@ ERS_DECLARE_ISSUE(detchannelmaps,                  ///< Namespace
                   "Failed to create TPCChannelMap of type " << plugin_name,          ///< Log Message from the issue
                   ((std::string)plugin_name) ///< Message parameters
 )
-ERS_DECLARE_ISSUE(detchannelmaps,                  ///< Namespace
-                  InvalidStream, ///< Type of the Issue
-                  "Invalid stream number " << stream,          ///< Log Message from the issue
-                  ((uint)stream) ///< Message parameters
+
+ERS_DECLARE_ISSUE(detchannelmaps,                         ///< Namespace
+                  InvalidStreamID,                        ///< Type of the Issue
+                  "Invalid stream identifier " << stream, ///< Log Message from the issue
+                  ((uint)stream)                          ///< Message parameters
 )
+
+ERS_DECLARE_ISSUE(detchannelmaps,                           ///< Namespace
+                  InvalidDetectorID,                        ///< Type of the Issue
+                  "Invalid detector identifier " << stream, ///< Log Message from the issue
+                  ((uint)stream)                            ///< Message parameters
+)
+
 
 namespace detchannelmaps {
 
@@ -51,48 +59,42 @@ class TPCChannelMap
 {
 public:
 
-  struct TPCCoords
+  struct TPCChannelInfo
   {
-    uint crate;
-    uint slot;
-    uint fiber;
-    uint channel;
+    static constexpr uint16_t kUndefined=0xffff;
+
+    uint16_t detector = kUndefined;
+    uint16_t crate = kUndefined;
+    uint16_t slot = kUndefined;
+    uint16_t stream = kUndefined;
+    uint16_t channel = kUndefined;
+    uint16_t element = kUndefined;
   };
 
   /**
    * @brief      Gets the offline channel from detector elements.
    *
-   * @param[in]  crate        The crate
-   * @param[in]  slot         The slot
-   * @param[in]  fiber        The fiber
-   * @param[in]  fembchannel  The channel
+   * @param[in]  det            The detector
+   * @param[in]  crate          The crate
+   * @param[in]  slot           The slot
+   * @param[in]  stream         The stream
+   * @param[in]  stream_channel The channel in the stream
    *
    * @return     The offline channel from detector elements.
    */
-  virtual uint get_offline_channel_from_crate_slot_fiber_chan(uint crate, uint slot, uint fiber, uint channel) = 0;
-  virtual uint get_offline_channel_from_crate_slot_stream_chan(uint crate, uint slot, uint stream, uint channel) {
+  virtual uint get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) = 0;
 
-    //if stream number looks wrong (not 0,1,2,3 or 64,65,66,67)
-    if( (stream & 0xbc) ) throw InvalidStream(ERS_HERE, stream);
-    
-    constexpr uint n_chan_per_stream = 64;
-
-    uint link = (stream >> 6) & 1;
-    uint locstream = (stream & 0x3);
-    uint ch = n_chan_per_stream*locstream+channel;
-    return this->get_offline_channel_from_crate_slot_fiber_chan(crate, slot, link, ch);
-
-  };
   virtual uint get_plane_from_offline_channel(uint offchannel) = 0;
-  virtual std::string get_tpc_element_from_offline_channel(uint ) { return ""; }
-  virtual std::optional<TPCCoords> get_crate_slot_fiber_chan_from_offline_channel(uint offchannel) = 0;
+  virtual uint get_element_id_from_offline_channel( uint ) = 0;
+  virtual std::string get_element_name_from_offline_channel(uint ) = 0;
+  virtual std::optional<TPCChannelInfo> get_channel_info_from_offline_channel(uint offchannel) = 0;
   /**
    * @brief TPCChannelMap destructor
    */
   virtual ~TPCChannelMap() noexcept = default;
     
 protected:
-   /*
+   /**
    * @brief TPCChannelMap Constructor
    * @param name Name of the TPCChannelMap
    */
@@ -108,9 +110,9 @@ protected:
  * @return shared_ptr to created TPCChannelMap instance
  */
 inline std::shared_ptr<TPCChannelMap>
-make_map(std::string const& plugin_name)
+make_tpc_map(std::string const& plugin_name)
 {
-  static cet::BasicPluginFactory bpf("duneChannelMap", "make");
+  static cet::BasicPluginFactory bpf("duneTPCChannelMap", "make");
 
   std::shared_ptr<TPCChannelMap> mod_ptr;
   try {

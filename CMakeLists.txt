@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
-project(detchannelmaps VERSION 1.7.1)
+project(detchannelmaps VERSION 1.8.1)
 
 find_package(daq-cmake REQUIRED)
 find_package(cetlib REQUIRED)   # Uses the daq-buildtools/cmake/Findcetlib.cmake
 find_package(ers REQUIRED)
 find_package(logging REQUIRED)
+find_package(fmt REQUIRED)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 daq_setup_environment()
@@ -14,7 +15,7 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging) 
+daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging::logging fmt::fmt) 
 
 ##############################################################################
 # Python bindings
@@ -22,22 +23,25 @@ daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
 
 ##############################################################################
 # Plugins
-daq_add_plugin( ProtoDUNESP1ChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( VDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( PD2HDChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( PD2VDBottomTPCChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( FiftyLChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( HDColdboxChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
-daq_add_plugin( ICEBERGChannelMap duneChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( FiftyLTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( ICEBERGChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+
+daq_add_plugin( HDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2HDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+
+daq_add_plugin( VDColdboxTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
+
 
 ##############################################################################
 # Integration tests
 
 # ##############################################################################
 # Test plugins
-daq_add_plugin( DummyChannelMap duneChannelMap TEST LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( DummyTPCChannelMap duneTPCChannelMap TEST LINK_LIBRARIES detchannelmaps )
 
-daq_add_application( dummy_map_test dummy_map_test.cxx TEST LINK_LIBRARIES detchannelmaps )
+daq_add_application( detchannelmaps_tpcmap_test tpcmap_test.cxx TEST LINK_LIBRARIES detchannelmaps fmt::fmt )
 
 ##############################################################################
 # Unit Tests
