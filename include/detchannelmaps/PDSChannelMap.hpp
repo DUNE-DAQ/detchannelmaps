@@ -51,30 +51,34 @@ class PDSChannelMap
 {
 public:
 
-  struct PDSCoords
-  {
-    uint det;
-    uint crate;
-    uint slot;
-    uint fiber;
-    uint channel;
-  };
+    struct PDSChannelInfo
+    {
+        static constexpr uint16_t kUndefined=0xffff;
+
+        uint16_t detector = kUndefined;
+        uint16_t crate = kUndefined;
+        uint16_t slot = kUndefined;
+        uint16_t stream = kUndefined;
+        uint16_t channel = kUndefined;
+        uint16_t element = kUndefined;
+    };
 
   /**
    * @brief      Gets the offline channel from detector elements.
    *
-   * @param[in]  det          The det
-   * @param[in]  crate        The crate
-   * @param[in]  slot         The slot
-   * @param[in]  fiber        The fiber
-   * @param[in]  fembchannel  The channel
+   * @param[in]  det            The detector
+   * @param[in]  crate          The crate
+   * @param[in]  slot           The slot
+   * @param[in]  stream         The stream
+   * @param[in]  stream_channel The channel in the stream
    *
    * @return     The offline channel from detector elements.
    */
   virtual uint get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) = 0;
 
   virtual uint get_element_from_offline_channel(uint ) = 0;
-  virtual std::optional<PDSCoords> get_det_crate_slot_fiber_chan_from_offline_channel(uint offchannel) = 0;
+  virtual std::string get_element_name_from_offline_channel(uint ) = 0;
+  virtual std::optional<PDSChannelInfo> get_det_crate_slot_fiber_chan_from_offline_channel(uint offchannel) = 0;
   /**
    * @brief PDSChannelMap destructor
    */
