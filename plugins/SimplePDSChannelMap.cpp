@@ -7,16 +7,16 @@
 namespace dunedaq {
 namespace detchannelmaps {
 
-class DefaultPDSChannelMap :  public PDSChannelMap
+class SimplePDSChannelMap :  public PDSChannelMap
 {
 public:
 
-  explicit DefaultPDSChannelMap() {}
+  explicit SimplePDSChannelMap() {}
 
-  DefaultPDSChannelMap(const DefaultPDSChannelMap&) = delete;            ///< DefaultPDSChannelMap is not copy-constructible
-  DefaultPDSChannelMap& operator=(const DefaultPDSChannelMap&) = delete; ///< DefaultPDSChannelMap is not copy-assignable
-  DefaultPDSChannelMap(DefaultPDSChannelMap&&) = delete;                 ///< DefaultPDSChannelMap is not move-constructible
-  DefaultPDSChannelMap& operator=(DefaultPDSChannelMap&&) = delete;      ///< DefaultPDSChannelMap is not move-assignable
+  SimplePDSChannelMap(const SimplePDSChannelMap&) = delete;            ///< SimplePDSChannelMap is not copy-constructible
+  SimplePDSChannelMap& operator=(const SimplePDSChannelMap&) = delete; ///< SimplePDSChannelMap is not copy-assignable
+  SimplePDSChannelMap(SimplePDSChannelMap&&) = delete;                 ///< SimplePDSChannelMap is not move-constructible
+  SimplePDSChannelMap& operator=(SimplePDSChannelMap&&) = delete;      ///< SimplePDSChannelMap is not move-assignable
 
   uint get_offline_channel_from_det_crate_slot_stream_chan(uint , //det
                                                            uint , //crate
@@ -50,7 +50,7 @@ public:
 
 };
 
-DEFINE_DUNE_DET_PDSCHANNEL_MAP(dunedaq::detchannelmaps::DefaultPDSChannelMap)
+DEFINE_DUNE_DET_PDSCHANNEL_MAP(dunedaq::detchannelmaps::SimplePDSChannelMap)
 
 
 } // namespace detchannelmaps

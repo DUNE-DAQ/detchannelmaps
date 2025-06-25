@@ -34,7 +34,7 @@ daq_add_plugin( PD2VDBottomTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detcha
 daq_add_plugin( PD2VDTPCChannelMap duneTPCChannelMap LINK_LIBRARIES detchannelmaps )
 
 
-daq_add_plugin( DefaultPDSChannelMap dunePDSChannelMap LINK_LIBRARIES detchannelmaps )
+daq_add_plugin( SimplePDSChannelMap dunePDSChannelMap LINK_LIBRARIES detchannelmaps )
 
 ##############################################################################
 # Integration tests
