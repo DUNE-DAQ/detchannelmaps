@@ -18,18 +18,12 @@ private:
    * 
    */
   explicit HDColdboxTPCChannelMap() :
-    PD2HDChannelMapSPPluginBase( kDetID, "pd2hd/PD2HDChannelMap_v2.txt" ) {
+    PD2HDChannelMapSPPluginBase( kDetID, "hdcoldbox/hdcb_chanmap_v1.txt" ) {
 
     m_elem_name_id_converter = [](const std::string& apa_name) -> uint {
       // Brute force approack
-      if(apa_name=="APA_P02SU") {
-        return 1;
-      } else if(apa_name=="APA_P01SU") {
-        return 2;
-      } else if(apa_name=="APA_P02NL") {
-        return 3;
-      } else if(apa_name=="APA_P01NL") {
-        return 4;
+      if(apa_name=="APA0") {
+        return 0;
       } else {
         return -1;
       }
