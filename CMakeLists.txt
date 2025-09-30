@@ -19,7 +19,7 @@ daq_add_library(*.cpp LINK_LIBRARIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers logging
 
 ##############################################################################
 # Python bindings
-daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
+daq_add_python_bindings(*.cpp)
 
 ##############################################################################
 # Plugins
