@@ -1,30 +1,48 @@
 #ifndef DETCHANNELMAPS_INCLUDE_DETCHANNELMAPS_PDSCHANNELMAP_HPP_
 #define DETCHANNELMAPS_INCLUDE_DETCHANNELMAPS_PDSCHANNELMAP_HPP_
 
-#include "cetlib/BasicPluginFactory.h"
-#include "cetlib/compiler_macros.h"
 #include "ers/Issue.hpp"
 #include "logging/Logging.hpp" // NOTE: if ISSUES ARE DECLARED BEFORE include logging/Logging.hpp, TLOG_DEBUG<<issue wont work.
+#include <functional>
+#include <map>
+#include <memory>
 #include <optional>
+#include <string>
 
 
-#ifndef EXTERN_C_FUNC_DECLARE_START
+// Helper macros for unique struct names that survive __LINE__ expansion
 // NOLINTNEXTLINE(build/define_used)
-#define EXTERN_C_FUNC_DECLARE_START                                                                                    \
-  extern "C"                                                                                                           \
-  {
-#endif
+#define DUNE_PDSMAP_DETAIL_CAT(a, b) a##b
+// NOLINTNEXTLINE(build/define_used)
+#define DUNE_PDSMAP_REGISTRAR(line) DUNE_PDSMAP_DETAIL_CAT(DunePDSMapRegistrar_, line)
+
 /**
- * @brief Declare the function that will be called by the plugin loader
- * @param klass Class to be defined as a DUNE DAQ Module
+ * @brief Register a PDSChannelMap implementation with the factory.
+ * @param klass Fully-qualified or unqualified concrete class to register
+ *              (must be default-constructible)
+ *
+ * The registration key is the simple class name (everything after the last "::").
  */
 // NOLINTNEXTLINE(build/define_used)
-#define DEFINE_DUNE_DET_PDSCHANNEL_MAP(klass)                                                                                  \
-  EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::shared_ptr<dunedaq::detchannelmaps::PDSChannelMap> make()                                                                  \
-  {                                                                                                                    \
-    return std::shared_ptr<dunedaq::detchannelmaps::PDSChannelMap>(new klass());                                                  \
-  }                                                                                                                    \
+#define DEFINE_DUNE_DET_PDSCHANNEL_MAP(klass)                                        \
+  namespace {                                                                         \
+  struct DUNE_PDSMAP_REGISTRAR(__LINE__)                                              \
+  {                                                                                   \
+    DUNE_PDSMAP_REGISTRAR(__LINE__)()                                                 \
+    {                                                                                 \
+      std::string full_name = #klass;                                                 \
+      auto pos = full_name.rfind("::");                                               \
+      std::string name = (pos != std::string::npos)                                  \
+                           ? full_name.substr(pos + 2)                                \
+                           : full_name;                                               \
+      dunedaq::detchannelmaps::PDSChannelMapFactory::instance().register_creator(     \
+        name,                                                                         \
+        []() -> std::shared_ptr<dunedaq::detchannelmaps::PDSChannelMap> {             \
+          return std::make_shared<klass>();                                           \
+        });                                                                           \
+    }                                                                                 \
+  };                                                                                  \
+  static DUNE_PDSMAP_REGISTRAR(__LINE__) DUNE_PDSMAP_DETAIL_CAT(s_pdsmap_reg_, __LINE__); \
   }
 
 
@@ -83,7 +101,7 @@ public:
    * @brief PDSChannelMap destructor
    */
   virtual ~PDSChannelMap() noexcept = default;
-    
+
 protected:
    /*
    * @brief PDSChannelMap Constructor
@@ -93,25 +111,49 @@ protected:
 };
 
 /**
- * @brief Load a PDSChannelMap plugin and return a shared_ptr to the contained
- * PDSChannelMap class
- * @param plugin_name Name of the plugin, e.g. DebugLoggingChannelMap
- * @param instance_name Name of the returned PDSChannelMap instance, e.g.
- * DebugLogger1
- * @return shared_ptr to created PDSChannelMap instance
+ * @brief Self-registering factory for PDSChannelMap implementations.
+ *
+ * Concrete implementations register themselves at static-init time via
+ * DEFINE_DUNE_DET_PDSCHANNEL_MAP(klass).  Callers use make_pds_map(name).
+ */
+class PDSChannelMapFactory
+{
+public:
+  using Creator = std::function<std::shared_ptr<PDSChannelMap>()>;
+
+  static PDSChannelMapFactory& instance()
+  {
+    static PDSChannelMapFactory s;
+    return s;
+  }
+
+  void register_creator(const std::string& name, Creator creator)
+  {
+    m_registry[name] = std::move(creator);
+  }
+
+  std::shared_ptr<PDSChannelMap> make(const std::string& name) const
+  {
+    auto it = m_registry.find(name);
+    if (it == m_registry.end()) {
+      throw PDSChannelMapCreationFailed(ERS_HERE, name);
+    }
+    return it->second();
+  }
+
+private:
+  std::map<std::string, Creator> m_registry;
+};
+
+/**
+ * @brief Instantiate a PDSChannelMap by name.
+ * @param plugin_name Name of the registered implementation, e.g. "SimplePDSChannelMap"
+ * @return shared_ptr to the created instance
  */
 inline std::shared_ptr<PDSChannelMap>
 make_pds_map(std::string const& plugin_name)
 {
-  static cet::BasicPluginFactory bpf("dunePDSChannelMap", "make");
-
-  std::shared_ptr<PDSChannelMap> mod_ptr;
-  try {
-    mod_ptr = bpf.makePlugin<std::shared_ptr<PDSChannelMap>>(plugin_name);
-  } catch (const cet::exception& cexpt) {
-    throw PDSChannelMapCreationFailed(ERS_HERE, plugin_name, cexpt);
-  }
-  return mod_ptr;
+  return PDSChannelMapFactory::instance().make(plugin_name);
 }
 
 } // namespace detchannelmaps
