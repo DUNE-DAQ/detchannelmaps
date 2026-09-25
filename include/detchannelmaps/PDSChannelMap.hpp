@@ -7,7 +7,6 @@
 #include "logging/Logging.hpp" // NOTE: if ISSUES ARE DECLARED BEFORE include logging/Logging.hpp, TLOG_DEBUG<<issue wont work.
 #include <optional>
 
-
 #ifndef EXTERN_C_FUNC_DECLARE_START
 // NOLINTNEXTLINE(build/define_used)
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
@@ -19,14 +18,13 @@
  * @param klass Class to be defined as a DUNE DAQ Module
  */
 // NOLINTNEXTLINE(build/define_used)
-#define DEFINE_DUNE_DET_PDSCHANNEL_MAP(klass)                                                                                  \
+#define DEFINE_DUNE_DET_PDSCHANNEL_MAP(klass)                                                                          \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::shared_ptr<dunedaq::detchannelmaps::PDSChannelMap> make()                                                                  \
+  std::shared_ptr<dunedaq::detchannelmaps::PDSChannelMap> make()                                                       \
   {                                                                                                                    \
-    return std::shared_ptr<dunedaq::detchannelmaps::PDSChannelMap>(new klass());                                                  \
+    return std::shared_ptr<dunedaq::detchannelmaps::PDSChannelMap>(new klass());                                       \
   }                                                                                                                    \
   }
-
 
 namespace dunedaq {
 
@@ -34,15 +32,15 @@ namespace dunedaq {
 /**
  * @brief A ERS Issue for PDSChannelMap creation failure
  */
-ERS_DECLARE_ISSUE(detchannelmaps,              ///< Namespace
-                  PDSChannelMapCreationFailed, ///< Type of the Issue
-                  "Failed to create PDSChannelMap of type " << plugin_name,          ///< Log Message from the issue
-                  ((std::string)plugin_name) ///< Message parameters
+ERS_DECLARE_ISSUE(detchannelmaps,                                           ///< Namespace
+                  PDSChannelMapCreationFailed,                              ///< Type of the Issue
+                  "Failed to create PDSChannelMap of type " << plugin_name, ///< Log Message from the issue
+                  ((std::string)plugin_name)                                ///< Message parameters
 )
-ERS_DECLARE_ISSUE(detchannelmaps,   ///< Namespace
-                  PDSInvalidStream, ///< Type of the Issue
-                  "Invalid stream number " << stream,          ///< Log Message from the issue
-                  ((uint)stream) ///< Message parameters
+ERS_DECLARE_ISSUE(detchannelmaps,                     ///< Namespace
+                  PDSInvalidStream,                   ///< Type of the Issue
+                  "Invalid stream number " << stream, ///< Log Message from the issue
+                  ((uint)stream)                      ///< Message parameters
 )
 
 namespace detchannelmaps {
@@ -50,18 +48,17 @@ namespace detchannelmaps {
 class PDSChannelMap
 {
 public:
+  struct PDSChannelInfo
+  {
+    static constexpr uint16_t kUndefined = 0xffff;
 
-    struct PDSChannelInfo
-    {
-        static constexpr uint16_t kUndefined=0xffff;
-
-        uint16_t detector = kUndefined;
-        uint16_t crate = kUndefined;
-        uint16_t slot = kUndefined;
-        uint16_t stream = kUndefined;
-        uint16_t channel = kUndefined;
-        uint16_t element = kUndefined;
-    };
+    uint16_t detector = kUndefined;
+    uint16_t crate = kUndefined;
+    uint16_t slot = kUndefined;
+    uint16_t stream = kUndefined;
+    uint16_t channel = kUndefined;
+    uint16_t element = kUndefined;
+  };
 
   /**
    * @brief      Gets the offline channel from detector elements.
@@ -74,22 +71,26 @@ public:
    *
    * @return     The offline channel from detector elements.
    */
-  virtual uint get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) = 0;
+  virtual uint get_offline_channel_from_det_crate_slot_stream_chan(uint det,
+                                                                   uint crate,
+                                                                   uint slot,
+                                                                   uint stream,
+                                                                   uint channel) = 0;
 
-  virtual uint get_element_from_offline_channel(uint ) = 0;
-  virtual std::string get_element_name_from_offline_channel(uint ) = 0;
+  virtual uint get_element_from_offline_channel(uint) = 0;
+  virtual std::string get_element_name_from_offline_channel(uint) = 0;
   virtual std::optional<PDSChannelInfo> get_det_crate_slot_fiber_chan_from_offline_channel(uint offchannel) = 0;
   /**
    * @brief PDSChannelMap destructor
    */
   virtual ~PDSChannelMap() noexcept = default;
-    
+
 protected:
-   /*
+  /*
    * @brief PDSChannelMap Constructor
    * @param name Name of the PDSChannelMap
    */
-  explicit PDSChannelMap(){}
+  explicit PDSChannelMap() {}
 };
 
 /**

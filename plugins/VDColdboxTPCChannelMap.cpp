@@ -1,24 +1,25 @@
-#include "detchannelmaps/TPCChannelMap.hpp"
-#include "PD2HDChannelMapSPPluginBase.hpp"
 #include "PD2HDChannelMapSP.h"
+#include "PD2HDChannelMapSPPluginBase.hpp"
+#include "detchannelmaps/TPCChannelMap.hpp"
 
 #include "logging/Logging.hpp" // NOLINT
 
 namespace dunedaq {
 namespace detchannelmaps {
 
-class VDColdboxTPCChannelMap :  public PD2HDChannelMapSPPluginBase
+class VDColdboxTPCChannelMap : public PD2HDChannelMapSPPluginBase
 {
 public:
   // TODO: Use detdataformats::kHD_TPC instead
   const static uint kDetID = 10;
-  
+
   /**
    * @brief Construct a new HDColdboxTPCChannelMap object
-   * 
+   *
    */
-  explicit VDColdboxTPCChannelMap() :
-    PD2HDChannelMapSPPluginBase( kDetID, "vdcoldbox/vdcbce_chanmap_v4.txt" ) {
+  explicit VDColdboxTPCChannelMap()
+    : PD2HDChannelMapSPPluginBase(kDetID, "vdcoldbox/vdcbce_chanmap_v4.txt")
+  {
 
     m_elem_name_id_converter = [](const std::string& apa_name) -> uint {
       // Brute force approack
@@ -27,11 +28,9 @@ public:
 
     TLOG_DEBUG(10) << "VDColdboxTPCChannelMap Created";
   }
-  
 };
 
 DEFINE_DUNE_DET_TPCCHANNEL_MAP(dunedaq::detchannelmaps::VDColdboxTPCChannelMap)
-
 
 } // namespace detchannelmaps
 } // namespace dunedaq
