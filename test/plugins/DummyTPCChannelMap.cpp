@@ -41,37 +41,30 @@ public:
   DummyTPCChannelMap(DummyTPCChannelMap&&) = delete;                 ///< DummyTPCChannelMap is not move-constructible
   DummyTPCChannelMap& operator=(DummyTPCChannelMap&&) = delete;      ///< DummyTPCChannelMap is not move-assignable
 
-  uint
-  get_offline_channel_from_det_crate_slot_stream_chan(uint /*det*/, uint /*crate*/, uint /*slot*/, uint /*stream*/, uint /*fembchannel*/) final {
+  uint get_offline_channel_from_det_crate_slot_stream_chan(uint /*det*/,
+                                                           uint /*crate*/,
+                                                           uint /*slot*/,
+                                                           uint /*stream*/,
+                                                           uint /*fembchannel*/) final
+  {
     return 5678;
   }
 
-  uint
-  get_plane_from_offline_channel(uint /*offchannel*/) final {
-    return 2;
-  }
+  uint get_plane_from_offline_channel(uint /*offchannel*/) final { return 2; }
 
-  uint
-  get_element_id_from_offline_channel(uint /*offchannel*/) final {
-    return 0;
-  }
+  uint get_element_id_from_offline_channel(uint /*offchannel*/) final { return 0; }
 
-  std::string
-  get_element_name_from_offline_channel(uint /*offchannel*/) final {
-    return "Dummy0";
-  }
+  std::string get_element_name_from_offline_channel(uint /*offchannel*/) final { return "Dummy0"; }
 
-  std::optional<TPCChannelInfo> 
-  get_channel_info_from_offline_channel(uint offchannel) {
-    return TPCChannelInfo{1, 2, 3, 4, 5, 6};
+  std::optional<TPCChannelInfo> get_channel_info_from_offline_channel(uint offchannel)
+  {
+    return TPCChannelInfo{ 1, 2, 3, 4, 5, 6 };
   }
-
 };
 
 } // namespace detchannelmaps
 } // namespace dunedaq
 
 #endif // DETCHANNELMAPS_TEST_PLUGINS_DummyTPCChannelMap_HPP_
-
 
 DEFINE_DUNE_DET_TPCCHANNEL_MAP(dunedaq::detchannelmaps::DummyTPCChannelMap)

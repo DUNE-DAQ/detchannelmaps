@@ -7,7 +7,6 @@
 #include "logging/Logging.hpp" // NOTE: if ISSUES ARE DECLARED BEFORE include logging/Logging.hpp, TLOG_DEBUG<<issue wont work.
 #include <optional>
 
-
 #ifndef EXTERN_C_FUNC_DECLARE_START
 // NOLINTNEXTLINE(build/define_used)
 #define EXTERN_C_FUNC_DECLARE_START                                                                                    \
@@ -19,14 +18,13 @@
  * @param klass Class to be defined as a DUNE DAQ Module
  */
 // NOLINTNEXTLINE(build/define_used)
-#define DEFINE_DUNE_DET_TPCCHANNEL_MAP(klass)                                                                                  \
+#define DEFINE_DUNE_DET_TPCCHANNEL_MAP(klass)                                                                          \
   EXTERN_C_FUNC_DECLARE_START                                                                                          \
-  std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap> make()                                                                  \
+  std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap> make()                                                       \
   {                                                                                                                    \
-    return std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap>(new klass());                                                  \
+    return std::shared_ptr<dunedaq::detchannelmaps::TPCChannelMap>(new klass());                                       \
   }                                                                                                                    \
   }
-
 
 namespace dunedaq {
 
@@ -34,10 +32,10 @@ namespace dunedaq {
 /**
  * @brief A ERS Issue for TPCChannelMap creation failure
  */
-ERS_DECLARE_ISSUE(detchannelmaps,                  ///< Namespace
-                  ChannelMapCreationFailed, ///< Type of the Issue
-                  "Failed to create TPCChannelMap of type " << plugin_name,          ///< Log Message from the issue
-                  ((std::string)plugin_name) ///< Message parameters
+ERS_DECLARE_ISSUE(detchannelmaps,                                           ///< Namespace
+                  ChannelMapCreationFailed,                                 ///< Type of the Issue
+                  "Failed to create TPCChannelMap of type " << plugin_name, ///< Log Message from the issue
+                  ((std::string)plugin_name)                                ///< Message parameters
 )
 
 ERS_DECLARE_ISSUE(detchannelmaps,                         ///< Namespace
@@ -52,16 +50,14 @@ ERS_DECLARE_ISSUE(detchannelmaps,                           ///< Namespace
                   ((uint)stream)                            ///< Message parameters
 )
 
-
 namespace detchannelmaps {
 
 class TPCChannelMap
 {
 public:
-
   struct TPCChannelInfo
   {
-    static constexpr uint16_t kUndefined=0xffff;
+    static constexpr uint16_t kUndefined = 0xffff;
 
     uint16_t detector = kUndefined;
     uint16_t crate = kUndefined;
@@ -82,23 +78,27 @@ public:
    *
    * @return     The offline channel from detector elements.
    */
-  virtual uint get_offline_channel_from_det_crate_slot_stream_chan(uint det, uint crate, uint slot, uint stream, uint channel) = 0;
+  virtual uint get_offline_channel_from_det_crate_slot_stream_chan(uint det,
+                                                                   uint crate,
+                                                                   uint slot,
+                                                                   uint stream,
+                                                                   uint channel) = 0;
 
   virtual uint get_plane_from_offline_channel(uint offchannel) = 0;
-  virtual uint get_element_id_from_offline_channel( uint ) = 0;
-  virtual std::string get_element_name_from_offline_channel(uint ) = 0;
+  virtual uint get_element_id_from_offline_channel(uint) = 0;
+  virtual std::string get_element_name_from_offline_channel(uint) = 0;
   virtual std::optional<TPCChannelInfo> get_channel_info_from_offline_channel(uint offchannel) = 0;
   /**
    * @brief TPCChannelMap destructor
    */
   virtual ~TPCChannelMap() noexcept = default;
-    
+
 protected:
-   /**
+  /**
    * @brief TPCChannelMap Constructor
    * @param name Name of the TPCChannelMap
    */
-  explicit TPCChannelMap(){}
+  explicit TPCChannelMap() {}
 };
 
 /**

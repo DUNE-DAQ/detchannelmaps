@@ -10,18 +10,26 @@
 
 #include "logging/Logging.hpp" // NOLINT
 
+#include "fmt/core.h"
 #include <iostream>
 #include <map>
 #include <memory>
 #include <string>
-#include "fmt/core.h"
 
 using namespace dunedaq::detchannelmaps;
 
-void test_tpc_map(const std::string& map_name, int det_id, int crate_id, int slot_id, int stream_id, int chan_id ) {
+void
+test_tpc_map(const std::string& map_name, int det_id, int crate_id, int slot_id, int stream_id, int chan_id)
+{
 
   TLOG() << "----------------------------------------------------";
-  TLOG() << fmt::format("Testing '{}', det={}, crate={}, slot={}, stream={}, channel={}", map_name, det_id, crate_id, slot_id, stream_id, chan_id);
+  TLOG() << fmt::format("Testing '{}', det={}, crate={}, slot={}, stream={}, channel={}",
+                        map_name,
+                        det_id,
+                        crate_id,
+                        slot_id,
+                        stream_id,
+                        chan_id);
 
   std::shared_ptr<TPCChannelMap> the_map = make_tpc_map(map_name);
 
@@ -32,15 +40,23 @@ void test_tpc_map(const std::string& map_name, int det_id, int crate_id, int slo
   plane = the_map->get_plane_from_offline_channel(oc);
   elem_id = the_map->get_element_id_from_offline_channel(oc);
   elem_name = the_map->get_element_name_from_offline_channel(oc);
-  auto ci = the_map->get_channel_info_from_offline_channel(oc); 
+  auto ci = the_map->get_channel_info_from_offline_channel(oc);
 
   if (ci) {
-    TLOG() << fmt::format("{} offline channel={}: det={}, crate={}, slot={}, stream={}, channel={}", map_name, oc, ci->detector, ci->crate, ci->slot, ci->stream, ci->channel);
+    TLOG() << fmt::format("{} offline channel={}: det={}, crate={}, slot={}, stream={}, channel={}",
+                          map_name,
+                          oc,
+                          ci->detector,
+                          ci->crate,
+                          ci->slot,
+                          ci->stream,
+                          ci->channel);
   } else {
     TLOG() << fmt::format("{} channel not found", map_name);
   }
-  
-  TLOG() << fmt::format("{} offline channel={}: plane={}, element={}, name={}", map_name, oc, plane, elem_id, elem_name);
+
+  TLOG() << fmt::format(
+    "{} offline channel={}: plane={}, element={}, name={}", map_name, oc, plane, elem_id, elem_name);
 }
 
 int
@@ -50,7 +66,7 @@ main()
 
   uint oc, plane, elem_id;
   std::string elem_name;
- 
+
   test_tpc_map("DummyTPCChannelMap", 1, 2, 3, 4, 5);
 
   test_tpc_map("VDColdboxTPCChannelMap", 10, 6, 1, 1, 63);

@@ -1,30 +1,32 @@
-#include "detchannelmaps/TPCChannelMap.hpp"
-#include "PD2HDChannelMapSPPluginBase.hpp"
 #include "PD2HDChannelMapSP.h"
+#include "PD2HDChannelMapSPPluginBase.hpp"
+#include "detchannelmaps/TPCChannelMap.hpp"
 
 #include "logging/Logging.hpp" // NOLINT
 
 namespace dunedaq {
 namespace detchannelmaps {
 
-class PD2VDBottomTPCChannelMap :  public PD2HDChannelMapSPPluginBase {
+class PD2VDBottomTPCChannelMap : public PD2HDChannelMapSPPluginBase
+{
 private:
   // TODO: Use detdataformats::kHD_TPC instead
   const static uint kDetID = 10;
-public:
 
+public:
   /**
    * @brief Construct a new HDColdboxTPCChannelMap object
-   * 
+   *
    */
-  explicit PD2VDBottomTPCChannelMap() :
-    PD2HDChannelMapSPPluginBase( kDetID, "pd2vd/PD2VDBottomTPCChannelMap_v1.txt" ) {
+  explicit PD2VDBottomTPCChannelMap()
+    : PD2HDChannelMapSPPluginBase(kDetID, "pd2vd/PD2VDBottomTPCChannelMap_v1.txt")
+  {
 
     m_elem_name_id_converter = [](const std::string& apa_name) -> uint {
       // Brute force approack
-      if(apa_name=="BottomCRP4") {
+      if (apa_name == "BottomCRP4") {
         return 4;
-      } else if(apa_name=="BottomCRP5") {
+      } else if (apa_name == "BottomCRP5") {
         return 5;
       } else {
         return -1;
@@ -33,11 +35,9 @@ public:
 
     TLOG_DEBUG(10) << "PD2VDBottomTPCChannelMap Created";
   }
-  
 };
 
 DEFINE_DUNE_DET_TPCCHANNEL_MAP(dunedaq::detchannelmaps::PD2VDBottomTPCChannelMap)
-
 
 } // namespace detchannelmaps
 } // namespace dunedaq
